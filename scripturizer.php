@@ -134,6 +134,18 @@ $scripturizer_translations[29]['abbrv'] = 'YLT';
 $scripturizer_translations[29]['name'] = 'Young\'s Literal Translation';
 $scripturizer_translations[29]['gateway_id'] = '15';
 
+$scripturizer_translations[30]['abbrv'] = 'LXX';
+$scripturizer_translations[30]['name'] = 'Septuigent';
+$scripturizer_translations[30]['gateway_id'] = '';
+
+$scripturizer_translations[31]['abbrv'] = 'NET';
+$scripturizer_translations[31]['name'] = 'NET Bible';
+$scripturizer_translations[31]['gateway_id'] = '';
+
+$scripturizer_translations[32]['abbrv'] = 'NRSV';
+$scripturizer_translations[32]['name'] = 'New Revised Standard Version';
+$scripturizer_translations[32]['gateway_id'] = '';
+
 // Sort the array alphabetically by translation name
 foreach ($scripturizer_translations as $key => $row) {
    $n[$key] = $row['name'];
@@ -475,6 +487,12 @@ function buildNewWindowLink($link, $volume, $book, $verse) {
     return $new_window_link;
 }
 
+function buildBiblerefTitle($translation, $volume, $book, $verse){
+	$book = str_replace('.','',$book);
+	$output = $translation .' ' .$volume.$book. ' ' .$verse;
+	return $output;
+}
+
 function scripturizeLinkReference($reference='',$volume='',$book='',$verse='',$translation='',$user_translation='') {
 global $scripturizer_translations;
     if ($volume) {
@@ -519,13 +537,14 @@ global $scripturizer_translations;
         // we could pull it directly from their site and include it in the $title text
         // http://www.gnpcb.org/esv/share/services/api/ for more info
              $link = 'http://www.gnpcb.org/esv/search/?go=Go&amp;q=';
-             $title = 'English Standard Version Bible';
+             $title = buildBiblerefTitle($translation, $volume, $book, $verse); // title attribute now follows the bibleref semantic standards
+
                 // If the user selects the "Open link in new window" option,
                 // then build the link here.
             	if (get_option('scripturizer_link_window')) {
                     $scripturizer_new_window_link = buildNewWindowLink($link, $volume, $book, $verse);
             	}
-             $link = sprintf('<a href="%s%s" title="%s">%s</a>',$link,htmlentities(urlencode(trim("$volume $book $verse"))),$title,trim($reference));
+             $link = sprintf('<a href="%s%s" title="%s" class="bibleref">%s</a>',$link,htmlentities(urlencode(trim("$volume $book $verse"))),$title,trim($reference));
         # Insert Show/Hide link and include ESV verse text
         if (get_option('scripturizer_xml_show_hide')) {
             $link .= getEsvText($volume, $book, $verse);
@@ -534,29 +553,29 @@ global $scripturizer_translations;
         case 'NET':
 		// example URL http://www.bible.org/netbible2/index.php?book=gen&chapter=1&verse=1&submit=Lookup+Verse
              $link = 'http://www.bible.org/netbible2/index.php';
-             $title = 'New English Translation';
+             $title = buildBiblerefTitle($translation, $volume, $book, $verse); // title attribute now follows the bibleref semantic standards
              $chapter = trim(strtok($verse,':'));
              $verses = trim(strtok('-,'));
              $book = scripturizeNETBook($volume.' '.$book);
-             $link = sprintf('<a href="%s?book=%s&amp;chapter=%s&amp;verse=%s&amp;submit=Lookup+Verse" title="%s">%s</a>',$link,htmlentities(urlencode($book)),$chapter,$verses,$title,trim($reference));
+             $link = sprintf('<a href="%s?book=%s&amp;chapter=%s&amp;verse=%s&amp;submit=Lookup+Verse" title="%s" class="bibleref">%s</a>',$link,htmlentities(urlencode($book)),$chapter,$verses,$title,trim($reference));
              break;
 	case 'NRSV':
 	// example URL http://bible.oremus.org/?passage=John+1%3A1&vnum=yes&version=nrsv
 	// there is a new interface being developed at http://bible.oremus.org/bible.cgi
              $link = 'http://bible.oremus.org/';
-             $title = 'New Revised Standard Version';
+             $title = buildBiblerefTitle($translation, $volume, $book, $verse); // title attribute now follows the bibleref semantic standards
 			 $options ='&amp;vnum=yes&amp;version=nrsv';
-             $link = sprintf('<a href="%s?passage=%s%s" title="%s">%s</a>',$link,htmlentities(urlencode(trim("$volume $book $verse"))),$options,$title,trim($reference));
+             $link = sprintf('<a href="%s?passage=%s%s" title="%s" class="bibleref">%s</a>',$link,htmlentities(urlencode(trim("$volume $book $verse"))),$options,$title,trim($reference));
              break;
 	case 'LXX':
 	// example URL http://www.zhubert.com/bible?book=Matthew&chapter=2&verse=3
 	// there's also an XML interface to this content - could do a trick like I propose with the ESV
              $link = 'http://www.zhubert.com/bible';
-             $title = 'original language at zhubert.com';
+             $title = buildBiblerefTitle($translation, $volume, $book, $verse); // title attribute now follows the bibleref semantic standards
 			$chapter=zhubertize_chapter($verse);
 			$verse=zhubertize_verse($verse);
 			$book=zhubertize_book($volume.' '.$book);
-             $link = sprintf('<a href="%s?book=%s&amp;chapter=%d&amp;verse=%d" title="%s">%s</a>',$link,htmlentities(urlencode(trim($book))),$chapter,$verse,$title,trim($reference));
+             $link = sprintf('<a href="%s?book=%s&amp;chapter=%d&amp;verse=%d" title="%s" class="bibleref">%s</a>',$link,htmlentities(urlencode(trim($book))),$chapter,$verse,$title,trim($reference));
              break;
         default:
 		// Bible Gateway has a ton of translations, so just make it the default instead of checking for each one
@@ -573,7 +592,7 @@ global $scripturizer_translations;
 		}
 
         $link = "http://biblegateway.com/bible?version=$translation_id&amp;passage=";
-	    $title = 'Bible Gateway';
+	    $title = buildBiblerefTitle($translation, $volume, $book, $verse); // title attribute now follows the bibleref semantic standards
             // If the user selects the "Open link in new window" option,
             // then build the link here.
         if (get_option('scripturizer_link_window')) {
