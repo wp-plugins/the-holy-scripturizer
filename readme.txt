@@ -23,6 +23,7 @@ No special tags or extra coding are needed. Simply type a Bible reference, like 
 * Works for posts, pages, and comments.
 * Dozens of versions supported in many languages. To use a specific translation, simple post-fix the abbreviation for that translation to the reference, like this: Genesis 1:1 ESV; Genesis 1:1 NIV; etc. (See the usage instructions page for more detailed instructions.)
 * Support for [Libronix](http://www.libronix.com/ "Libronix is a digital library software system from Logos Software") links.
+* [Bibleref](http://semanticbible.com/bibleref/bibleref-overview.html "Bibleref, semantic standards for Bible verse markup") standards compliant.
 
 == Installation ==
 
