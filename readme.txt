@@ -1,9 +1,9 @@
 === The Holy Scripturizer ===
 Contributors: laurence0
-Donate link: http://LaurenceO.com
+Donate link: http://lo.notsorry.net
 Tags: Bible, Scripture, Christian, post, comments, formatting, ajax
 Requires at least: 1.5
-Tested up to: 2.1
+Tested up to: 2.2
 Stable tag: 1.7
 
 Automatically link your Bible references to Bible sites. Works with almost every major Bible version in many languages. Easy setup; customizable.
@@ -91,13 +91,16 @@ Scripturizer supports many versions (soon to be all versions) from the Bible Gat
 1. Holman Christian Standard Bible (HCSB)
 1. King James Version (KJV)
 1. Luther Bibel 1545 (LUTH1545)
+1. Septuigent (LXX)
 1. New American Standard Bible (NASB)
+1. New English Translation (NET)
 1. New International Reader’s Version (NIRV)
 1. New International Version (NIV)
 1. New International Version - UK (NIVUK)
 1. New King James Version (NKJV)
 1. New Life Version (NLV)
 1. New Living Translation (NLT)
+1. New Revised Standard Version (NRSV)
 1. Slovo na cestu (SNC)
 1. The Message (MSG)
 1. Today’s New International Version (TNIV)
@@ -109,5 +112,5 @@ Scripturizer supports many versions (soon to be all versions) from the Bible Gat
 == Frequently Asked Questions ==
 
 = How do I contact the author? =
-Contact [Laurence O'Donnell](http://LaurenceO.com/contact/ "Contact Laurence O'Donnell")
+Contact [Laurence O'Donnell](http://lo.notsorry.net/contact/ "Contact Laurence O'Donnell")
 
