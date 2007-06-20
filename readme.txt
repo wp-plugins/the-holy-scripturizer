@@ -112,6 +112,9 @@ Scripturizer supports many versions (soon to be all versions) from the Bible Gat
 
 == Frequently Asked Questions ==
 
+= What configuration options does Scripturizer offer? =
+See the [Usage Instructions](http://wordpress.org/extend/plugins/the-holy-scripturizer/other_notes/ "Usage instructions for the Holy Scripturizer")
+
 = How do I contact the author? =
 Contact [Laurence O'Donnell](http://lo.notsorry.net/contact/ "Contact Laurence O'Donnell")
 
