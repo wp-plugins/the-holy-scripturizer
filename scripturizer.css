@@ -1,0 +1,18 @@
+.tooltip {
+		max-width: 30em;
+		text-align: left;
+        padding: 0.5em;
+        margin: 0;
+        background-color: #333;
+        color: #FFF
+}
+
+.scripturizer_showhide {
+		white-space: pre; 
+		display: none; 
+		padding: 1em; 
+		border: solid DarkGrey 1px;
+}
+.scripturizer_newwindow {
+	margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 5px; border: 0px;
+}

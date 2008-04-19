@@ -1,10 +1,10 @@
 <?php
 /*
 Plugin Name: The Holy Scripturizer
-Version: 1.7
+Version: 1.8b
 Plugin URI: http://scripturizer.wordpress.com
 Description: Automatically converts Bible references into hyperlinks pointed to major online Bible sites.
-Author: Dean Peters, ported by Glen Davis, updated by Laurence O'Donnell
+Author: Dean Peters, ported by Glen Davis, updated by Laurence O'Donnell & Peter V Cook (v1.8)
 Author URI: http://www.healyourchurchwebsite.com/
 */
 
@@ -172,10 +172,9 @@ global $scripturizer_translations;
     if (isset($_POST['info_update'])) { //Update/install options action
         update_option('scripturizer_default_translation', $_POST['scripturizer_default_translation']);
         update_option('scripturizer_link_window', $_POST['scripturizer_link_window']);
-        update_option('scripturizer_link_window_css', $_POST['scripturizer_link_window_css']);
         update_option('scripturizer_xml_show_hide', $_POST['scripturizer_xml_show_hide']);
+        update_option('scripturizer_xml_tooltip', $_POST['scripturizer_xml_tooltip']);
         update_option('scripturizer_esv_key', $_POST['scripturizer_esv_key']);
-        update_option('scripturizer_xml_css', $_POST['scripturizer_xml_css']);
         update_option('scripturizer_esv_query_options', $_POST['scripturizer_esv_query_options']);
     ?>
         <div class="updated"><p><strong>
@@ -183,7 +182,7 @@ global $scripturizer_translations;
         </strong></p></div>
     <?php
     } elseif(isset($_POST['uninstall'])) { //Reset/uninstall action
-		$s_options_list = "scripturizer_default_translation|scripturizer_link_window|scripturizer_link_window_css|scripturizer_xml_show_hide|scripturizer_esv_key|scripturizer_xml_css|scripturizer_esv_query_options";
+		$s_options_list = "scripturizer_default_translation|scripturizer_link_window|scripturizer_xml_show_hide|scripturizer_xml_tooltip|scripturizer_esv_key|scripturizer_esv_query_options";
 		$s_options = explode('|', $s_options_list);
 
 		foreach($s_options as $x) {
@@ -221,7 +220,7 @@ if (!get_option('scripturizer_default_translation')) { //Show install instructio
            <p>
             <label for="scripturizer_default_translation">
            <b><?php _e('Default Bible Translation', 'Scripturizer'); ?></b>
-           <br /><?php _e('The Scripturizer supports any version from the <a href="http://www.biblegateway.com" title="Go to Bible Gateway">Bible Gateway</a> plus ESV, NET, NRSV, and LXX. However, this option must be ESV if you want to use the ESV show/hide verse text option.', 'Scripturizer'); ?>
+           <br /><?php _e('The Scripturizer supports any version from the <a href="http://www.biblegateway.com" title="Go to Bible Gateway">Bible Gateway</a> plus ESV, NET, NRSV, and LXX.', 'Scripturizer'); ?>
 
 
            <br /><select name="scripturizer_default_translation">
@@ -249,8 +248,6 @@ if (!get_option('scripturizer_default_translation')) { //Show install instructio
             <label for="scripturizer_link_window">
            <b><?php _e('New Window Icon', 'Scripturizer'); ?></b><br />
 <?php _e('Would you like to give your viewers the option of opening the verse link in a new window? Set to 0 for "No" and 1 for "Yes." If you select "yes," a small icon will appear next to the Scripture reference that will open a new browser window when it is clicked.', 'Scripturizer'); ?>
-<br />
-<?php _e('To use this feature, you need to save a copy of <b>new-window.gif</b> to your <b>/wp-content</b> directory. (Download this image from <a href="http://scripturizer.wordpress.com/download" target="scripturizer">the Scripturizer HQ</a>)', 'Scripturizer'); ?>
            <br /><input type="text" name="scripturizer_link_window" value="<?php
                 if (get_option('scripturizer_link_window') == ''){
                     echo '0';
@@ -261,19 +258,8 @@ if (!get_option('scripturizer_default_translation')) { //Show install instructio
             </p>
 
             <p>
-            <label for="scripturizer_link_window_css">
             <b><?php _e('CSS For New Window Link', 'Scripturizer'); ?></b><br />
-            <?php _e('This CSS modifies the <b><code>A</code></b> tag for the "Open Passage in a New Window" link. Do not use any line breaks--that means don\'t push your ENTER key in this box--since the styles are added straight to the a tag.', 'Scripturizer'); ?>
-            <br />
-            <?php
-                if (get_option('scripturizer_link_window_css') == ''){
-                    $scripturizer_new_window_css = 'margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 5px; border: 0px;';
-                } else {
-                    $scripturizer_new_window_css = get_option('scripturizer_link_window_css');
-                } ?>
-
-            <textarea name="scripturizer_link_window_css" cols="50" rows="6" wrap="VIRTUAL"><?php echo $scripturizer_new_window_css; ?></textarea>
-            </label>
+            <?php _e('You may modify the style of the "Open Passage in a New Window" link in your CSS by using <code>a.scripturizer_newwindow</code>', 'Scripturizer'); ?>
             </p>
 
         </fieldset>
@@ -281,7 +267,7 @@ if (!get_option('scripturizer_default_translation')) { //Show install instructio
         <fieldset class="options">
             <legend><b><?php _e('ESV Show/Hide Verse Text Options', 'Scripturizer'); ?></b></legend>
             <p><b><?php _e('Overview', 'Scripturizer'); ?></b><br />
-            <?php _e('This section allows you to take advantage of the ESV Bible Web Service in order to display the text of the Bible verses that you reference in your posts and pages. Turning this option on will activate a "[+/-]" (show/hide) link that will display next to the verse reference. If the user clicks on the show/hide link, the text of the ESV Bible will display on the page.', 'Scripturizer'); ?>
+            <?php _e('This section allows you to take advantage of the ESV Bible Web Service in order to display the text of the Bible verses that you reference in your posts and pages. Turning this option on will activate a "[show/hide]" link that will display next to the verse reference. If the user clicks on the show/hide link, the text of the ESV Bible will display on the page.', 'Scripturizer'); ?>
             </p>
 
             <p><?php _e('Please note that the ESV Web Service does come with legal limitations as to how many verses you are allowed to display and how many queries are allowed per day. Please <a href="http://www.gnpcb.org/esv/share/services/" target="_new">familiarize yourself with these restrictions</a> <b>before</b> activating this option.', 'Scripturizer'); ?>
@@ -297,6 +283,19 @@ if (!get_option('scripturizer_default_translation')) { //Show install instructio
                     echo '0';
                 }else {
                  echo get_option('scripturizer_xml_show_hide');
+                } ?>" size="3" />
+           </label>
+           </p>
+           
+           <p>
+           <label for="scripturizer_xml_tooltip">
+           <b><?php _e('Turn on rollover Tool TIp to display the text from the ESV', 'Scripturizer'); ?></b>
+           <br /><?php _e('If yes, set to 1. If no, set to 0.', 'Scripturizer'); ?>
+           <br /><input type="text" name="scripturizer_xml_tooltip" value="<?php
+                if (get_option('scripturizer_xml_tooltip') == ''){
+                    echo '0';
+                }else {
+                 echo get_option('scripturizer_xml_tooltip');
                 } ?>" size="3" />
            </label>
            </p>
@@ -316,17 +315,7 @@ if (!get_option('scripturizer_default_translation')) { //Show install instructio
             <p>
             <label for="scripturizer_xml_css">
             <b><?php _e('CSS for ESV inline verse display', 'Scripturizer'); ?></b><br />
-            <?php _e('This CSS modifies the SPAN tag in which the ESV verse text will be displayed on your page. Do not use any line breaks--that means don\'t push your ENTER key in this box--since the styles are added straight to the span tag.', 'Scripturizer'); ?>
-            <br />
-            <?php
-                if (get_option('scripturizer_xml_css') == ''){
-                    $LO_esv_form_css = 'white-space: pre; display: none; padding: 10px; border: dotted blue 1px; border-left: solid blue 5px; color: black;';
-                } else {
-                    $LO_esv_form_css = get_option('scripturizer_xml_css');
-                } ?>
-
-            <textarea name="scripturizer_xml_css" cols="50" rows="10" wrap="VIRTUAL"><?php echo $LO_esv_form_css; ?></textarea>
-            </label>
+            <?php _e('You may modify the style of the verse text that is visible using the "[show/hide]" link in your CSS by using <code>span.scripturizer_showhide</code>.', 'Scripturizer'); ?>
             </p>
 
             <p>
@@ -372,7 +361,7 @@ if (!get_option('scripturizer_default_translation')) { //Show install instructio
     <fieldset class="options">
         <legend><b><?php _e('Credits', 'Scripturizer'); ?></b></legend>
 
-        <p><?php _e('The original coding props go to <a href="http://www.healyourchurchwebsite.com/">Dean Peters</a> for his original Scripturizer code. After Dean\'s original work <a href="http://xastanford.org/archives/scripturizer-in-php/">Glen</a> turned Scripturizer into a Wordpress plugin. And <a href="http://LaurenceO.com" title="Scripturizer info can be found in the Webmaster/Scripturizer category on LaurenceO.com">Laurence</a> has been updating the Scripturizer since Wordpress 1.5 came alive. The authors can be contacted through their respective web sites (but please see below for support options).', 'Scripturizer'); ?></p>
+        <p><?php _e('The original coding props go to <a href="http://www.healyourchurchwebsite.com/">Dean Peters</a> for his original Scripturizer code. After Dean\'s original work <a href="http://xastanford.org/archives/scripturizer-in-php/">Glen</a> turned Scripturizer into a Wordpress plugin. <a href="http://LaurenceO.com" title="Scripturizer info can be found in the Webmaster/Scripturizer category on LaurenceO.com">Laurence</a> maintained Scripturizer from WordPress 1.5 through WordPress 2.2. Peter has been adding enchancements since WordPress 2.3. The authors can be contacted through their respective web sites (but please see below for support options).', 'Scripturizer'); ?></p>
     </fieldset>
 
     </div>
@@ -419,24 +408,13 @@ function getEsvText($volume, $book, $verse) {
     $esvResponse = curl_exec($esvCh);
     curl_close($esvCh);
 
-// Get rid of triple and double line breaks since WP turns them into <p>'s and thereby kills our <span>
-//    $esvResponse = str_replace("\n\n\n", "\n", $esvResponse);
+// Get rid of double line breaks since WP turns them into <p>'s and thereby kills our <span>
     $esvResponse = str_replace("\n\n", "\n", $esvResponse);
+    	$esvResponse = htmlentities($esvResponse);
 
-    // Build the show/hide link
-    $esvSpanId = 'scripturizer' .mt_rand(); //prefix the rand number with "id" to pass XHTML validation
-    $output_dynamic = " <a href=\"javascript://\" onclick=\"showhide('"
-        . $esvSpanId
-        . "');\">[+/-]</a><span id=\""
-        . $esvSpanId
-        . "\" style=\""
-        . get_option('scripturizer_xml_css')
-        . "\">"
-        . $esvResponse
-        . "<br /><a href=\"http://www.esv.org/\"><img src=\"http://www.esv.org/assets/buttons/small.7.png\" alt=\"This text is from the ESV Bible. Visit www.esv.org to learn about the ESV.\" title=\"Visit www.esv.org to learn about the ESV Bible\" width=\"80\" height=\"21\" /></a>"
-        . "</span>";
+//	echo 'ESV Response'.$esvResponse;
+	return $esvResponse;
 
-    return $output_dynamic;
 }
 
 function scripturizeAddLinks($text = '',$bible = NULL) {
@@ -471,7 +449,7 @@ global $scripturizer_translations;
 
 
 	// note that this will be executed as PHP code after substitution thanks to the /e at the end!
-    $passage_regex = '/(?:('.$volume_regex.')\s)?('.$book_regex.')\s('.$verse_regex.')(?:\s?[,-]?\s?((?:'.$translation_regex.')|\s?\((?:'.$translation_regex.')\)))?/e';
+    $passage_regex = '/(?:('.$volume_regex.')\s)?('.$book_regex.')\s+('.$verse_regex.')(?:\s?[,-]?\s?((?:'.$translation_regex.')|\s?\((?:'.$translation_regex.')\)))?/e';
 
     $replacement_regex = "scripturizeLinkReference('\\0','\\1','\\2','\\3','\\4','$bible')";
 
@@ -481,15 +459,18 @@ global $scripturizer_translations;
 }
 
 function buildNewWindowLink($link, $volume, $book, $verse) {
-    $new_window_link_css = get_option('scripturizer_link_window_css');
-    $new_window_link = sprintf('<a style="%s" href="%s%s" title="Open this passage in a new browser window" target="_new"><img src="' .get_settings('home') .'/wp-content/new-window.gif" alt="Open Link in New Window" /></a>',$new_window_link_css,$link,htmlentities(urlencode(trim("$volume $book $verse"))));
+    $new_window_link = sprintf('<a href="%s%s" class="scripturizer_newwindow" title="Open this passage in a new browser window" target="_new"><img src="' .get_settings('home') .'/wp-content/plugins/the-holy-scripturizer/new-window.gif" alt="Open Link in New Window" /></a>',$link,htmlentities(urlencode(trim("$volume $book $verse"))));
 
     return $new_window_link;
 }
 
 function buildBiblerefTitle($translation, $volume, $book, $verse){
 	$book = str_replace('.','',$book);
-	$output = $translation .' ' .$volume.$book. ' ' .$verse;
+	if (get_option('scripturizer_xml_tooltip')) { // Insert ToolTip and include ESV verse text
+		 $output= getEsvText($volume, $book, $verse);
+    } else {
+		$output = $translation .' ' .$volume.$book. ' ' .$verse;
+	}
 	return $output;
 }
 
@@ -544,11 +525,7 @@ global $scripturizer_translations;
             	if (get_option('scripturizer_link_window')) {
                     $scripturizer_new_window_link = buildNewWindowLink($link, $volume, $book, $verse);
             	}
-             $link = sprintf('<a href="%s%s" title="%s" class="bibleref">%s</a>',$link,htmlentities(urlencode(trim("$volume $book $verse"))),$title,trim($reference));
-        # Insert Show/Hide link and include ESV verse text
-        if (get_option('scripturizer_xml_show_hide')) {
-            $link .= getEsvText($volume, $book, $verse);
-        }
+             $link = sprintf('<a href="%s%s" title="%s" class="scripturized bibleref">%s</a>',$link,htmlentities(urlencode(trim("$volume $book $verse"))),$title,trim($reference));
              break;
         case 'NET':
 		// example URL http://www.bible.org/netbible2/index.php?book=gen&chapter=1&verse=1&submit=Lookup+Verse
@@ -557,7 +534,7 @@ global $scripturizer_translations;
              $chapter = trim(strtok($verse,':'));
              $verses = trim(strtok('-,'));
              $book = scripturizeNETBook($volume.' '.$book);
-             $link = sprintf('<a href="%s?book=%s&amp;chapter=%s&amp;verse=%s&amp;submit=Lookup+Verse" title="%s" class="bibleref">%s</a>',$link,htmlentities(urlencode($book)),$chapter,$verses,$title,trim($reference));
+             $link = sprintf('<a href="%s?book=%s&amp;chapter=%s&amp;verse=%s&amp;submit=Lookup+Verse" title="%s" class="scripturized bibleref">%s</a>',$link,htmlentities(urlencode($book)),$chapter,$verses,$title,trim($reference));
              break;
 	case 'NRSV':
 	// example URL http://bible.oremus.org/?passage=John+1%3A1&vnum=yes&version=nrsv
@@ -565,7 +542,7 @@ global $scripturizer_translations;
              $link = 'http://bible.oremus.org/';
              $title = buildBiblerefTitle($translation, $volume, $book, $verse); // title attribute now follows the bibleref semantic standards
 			 $options ='&amp;vnum=yes&amp;version=nrsv';
-             $link = sprintf('<a href="%s?passage=%s%s" title="%s" class="bibleref">%s</a>',$link,htmlentities(urlencode(trim("$volume $book $verse"))),$options,$title,trim($reference));
+             $link = sprintf('<a href="%s?passage=%s%s" title="%s" class="scripturized bibleref">%s</a>',$link,htmlentities(urlencode(trim("$volume $book $verse"))),$options,$title,trim($reference));
              break;
 	case 'LXX':
 	// example URL http://www.zhubert.com/bible?book=Matthew&chapter=2&verse=3
@@ -575,7 +552,7 @@ global $scripturizer_translations;
 			$chapter=zhubertize_chapter($verse);
 			$verse=zhubertize_verse($verse);
 			$book=zhubertize_book($volume.' '.$book);
-             $link = sprintf('<a href="%s?book=%s&amp;chapter=%d&amp;verse=%d" title="%s" class="bibleref">%s</a>',$link,htmlentities(urlencode(trim($book))),$chapter,$verse,$title,trim($reference));
+             $link = sprintf('<a href="%s?book=%s&amp;chapter=%d&amp;verse=%d" title="%s" class="scripturized bibleref">%s</a>',$link,htmlentities(urlencode(trim($book))),$chapter,$verse,$title,trim($reference));
              break;
         default:
 		// Bible Gateway has a ton of translations, so just make it the default instead of checking for each one
@@ -598,12 +575,29 @@ global $scripturizer_translations;
         if (get_option('scripturizer_link_window')) {
                 $scripturizer_new_window_link = buildNewWindowLink($link, $volume, $book, $verse);
         	}
-        $link = sprintf('<a href="%s%s" title="%s">%s</a>',$link,htmlentities(urlencode(trim("$volume $book $verse"))),$title,trim($reference));
+        $link = sprintf('<a href="%s%s" class="scripturized" title="%s">%s</a>',$link,htmlentities(urlencode(trim("$volume $book $verse"))),$title,trim($reference));
     	break;
     }
 
 	if (get_option('scripturizer_libronix')) {
 		$link.=$libronix;
+	}
+	# Insert Show/Hide link and include ESV verse text
+	if (get_option('scripturizer_xml_show_hide')) {
+	
+		$esvResponse = getEsvText($volume, $book, $verse);
+
+	    // Build the show/hide link
+		$esvSpanId = 'scripturizer' .mt_rand(); //prefix the rand number with "id" to pass XHTML validation
+		$output_dynamic = " <a href=\"javascript://\" onclick=\"showhide('"
+        . $esvSpanId
+        . "');\"><small>[show/hide]</small></a><span id=\"" . $esvSpanId . "\" class=\"scripturizer_showhide\">"
+        . $esvResponse
+        . "<br />"
+        . "<a href=\"http://www.esv.org/\"><img src=\"http://www.esv.org/assets/buttons/small.7.png\" alt=\"This text is from the ESV Bible. Visit www.esv.org to learn about the ESV.\" title=\"Visit www.esv.org to learn about the ESV Bible\" width=\"80\" height=\"21\" /></a>"
+        . "</span>";
+	
+		$link .= $output_dynamic;
 	}
 	if (get_option('scripturizer_link_window')) {
         $link.=$scripturizer_new_window_link;
@@ -924,6 +918,13 @@ function scripturizeComment($comment_ID) {
     return $comment_ID;
 }
 
+if (! function_exists('scripturizerHeader')) {
+
+    function scripturizerHeader() {
+    	echo '<link rel="stylesheet" type="text/css" media="screen" href="'.get_settings('home') .'/wp-content/plugins/the-holy-scripturizer/scripturizer.css"/></style>';
+    }
+}
+
 if (! function_exists('esvShowHideHeader')) {
 
     function esvShowHideHeader() {
@@ -953,15 +954,44 @@ if (! function_exists('esvShowHideHeader')) {
             }
             }
             //-->
-            </script>";
+            </script>
+            ";
+    echo $content;
+    }
+}
+
+if (! function_exists('esvToolTipHeader')) {
+
+    function esvToolTipHeader() {
+
+        $content = "
+            <script type=\"text/javascript\" src=\"".get_settings('home') ."/wp-includes/js/prototype.js\"></script>
+            <script type=\"text/javascript\" src=\"".get_settings('home') ."/wp-content/plugins/the-holy-scripturizer/tooltip-v0.2.js\"></script>
+            <script type=\"text/javascript\">
+			Event.observe(window,\"load\",function() {
+				   $$(\".scripturized\").findAll(function(node){
+					 return node.getAttribute('title');
+				   }).each(function(node){
+					 new Tooltip(node,node.title);
+					 node.removeAttribute(\"title\");
+				   });
+				 });
+            </script>
+		";
     echo $content;
     }
 }
 
 ##### ADD ACTIONS AND FILTERS
+add_action('wp_head', 'scripturizerHeader', 5);
+
 if (get_option('scripturizer_xml_show_hide')) { // Load the javascript if the xml show/hide option is turned on
-    add_action('wp_head', 'esvShowHideHeader', 10);
+    add_action('wp_head', 'esvShowHideHeader', 5);
     add_action('admin_head', 'esvShowHideHeader', 5);
+}
+if (get_option('scripturizer_xml_tooltip')) { // Load the javascript if the tooltip option is turned on
+    add_action('wp_head', 'esvToolTipHeader', 5);
+    add_action('admin_head', 'esvToolTipHeader', 5);
 }
 add_filter('the_content','scripturize'); // Scripturize the content of posts and pages
 add_filter('comment_text','scripturize'); // Scripturize the comments of posts and pages
