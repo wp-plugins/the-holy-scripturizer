@@ -248,12 +248,8 @@ if (!get_option('scripturizer_default_translation')) { //Show install instructio
             <label for="scripturizer_link_window">
            <b><?php _e('New Window Icon', 'Scripturizer'); ?></b><br />
 <?php _e('Would you like to give your viewers the option of opening the verse link in a new window? Set to 0 for "No" and 1 for "Yes." If you select "yes," a small icon will appear next to the Scripture reference that will open a new browser window when it is clicked.', 'Scripturizer'); ?>
-           <br /><input type="text" name="scripturizer_link_window" value="<?php
-                if (get_option('scripturizer_link_window') == ''){
-                    echo '0';
-                }else {
-                 echo get_option('scripturizer_link_window');
-                } ?>" size="3" />
+           <br />
+           <input name="scripturizer_link_window" type="checkbox" id="scripturizer_link_window" value="1" <?php checked('1', get_option('scripturizer_link_window')); ?> />
            </label>
             </p>
 
@@ -278,25 +274,18 @@ if (!get_option('scripturizer_default_translation')) { //Show install instructio
             <label for="scripturizer_xml_show_hide">
            <b><?php _e('Turn on the Show/Hide link to display the ESV text (in addition to the reference)', 'Scripturizer'); ?></b>
            <br /><?php _e('If yes, set to 1. If no, set to 0.', 'Scripturizer'); ?>
-           <br /><input type="text" name="scripturizer_xml_show_hide" value="<?php
-                if (get_option('scripturizer_xml_show_hide') == ''){
-                    echo '0';
-                }else {
-                 echo get_option('scripturizer_xml_show_hide');
-                } ?>" size="3" />
+           <br />
+		  <input name="scripturizer_xml_show_hide" type="checkbox" id="scripturizer_xml_show_hide" value="1" <?php checked('1', get_option('scripturizer_xml_show_hide')); ?> />
            </label>
            </p>
            
            <p>
            <label for="scripturizer_xml_tooltip">
            <b><?php _e('Turn on rollover Tool TIp to display the text from the ESV', 'Scripturizer'); ?></b>
-           <br /><?php _e('If yes, set to 1. If no, set to 0.', 'Scripturizer'); ?>
-           <br /><input type="text" name="scripturizer_xml_tooltip" value="<?php
-                if (get_option('scripturizer_xml_tooltip') == ''){
-                    echo '0';
-                }else {
-                 echo get_option('scripturizer_xml_tooltip');
-                } ?>" size="3" />
+           <br />
+           <input name="scripturizer_xml_tooltip" type="checkbox" id="scripturizer_xml_tooltip" value="1" <?php checked('1', get_option('scripturizer_xml_tooltip')); ?> />
+			<?php _e('Use rollover tool tip. Example: <a href="http://biblegateway.com/bible?version=31&amp;passage=John+3%3A16" class="scripturized" title="&quot;For God so loved the world, that he gave his only Son, 
+that whoever believes in him should not perish but have eternal life. (ESV)">John 3:16</a>', 'Scripturizer'); ?>
            </label>
            </p>
 
@@ -984,6 +973,7 @@ if (! function_exists('esvToolTipHeader')) {
 
 ##### ADD ACTIONS AND FILTERS
 add_action('wp_head', 'scripturizerHeader', 5);
+add_action('admin_head', 'scripturizerHeader', 5);
 
 if (get_option('scripturizer_xml_show_hide')) { // Load the javascript if the xml show/hide option is turned on
     add_action('wp_head', 'esvShowHideHeader', 5);
