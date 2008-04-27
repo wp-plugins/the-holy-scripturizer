@@ -19,7 +19,7 @@ No special tags or extra coding are needed. Simply type a Bible reference, like 
 * Easy to administer via the admin panel under the Options page (`Options --> Scripturizer`).
 * No proprietary markup tags. You don’t have to use special tags (such as [bible]Genesis 1:1[/bible]) around Bible references.
 * Optional open Bible links in new windows/tabs.
-* Automatically include the ESV text with a show/hide link next to references.
+* Automatically include the ESV text on rollover or with a show/hide link next to references.
 * Works for posts, pages, and comments.
 * Dozens of versions supported in many languages. To use a specific translation, simple post-fix the abbreviation for that translation to the reference, like this: Genesis 1:1 ESV; Genesis 1:1 NIV; etc. (See the usage instructions page for more detailed instructions.)
 * Support for [Libronix](http://www.libronix.com/ "Libronix is a digital library software system from Logos Software") links.
@@ -114,6 +114,37 @@ Scripturizer supports many versions (soon to be all versions) from the Bible Gat
 
 = What configuration options does Scripturizer offer? =
 See the [Usage Instructions](http://wordpress.org/extend/plugins/the-holy-scripturizer/other_notes/ "Usage instructions for the Holy Scripturizer")
+
+= How do I change the style of the rollover box? =
+
+In your template's CSS file, add a definition for `.tooltip`. Example:
+
+.tooltip {
+		max-width: 30em;
+		text-align: left;
+      padding: 0.5em;
+      margin: 0;
+      background-color: #333;
+      color: #FFF
+}
+
+= How do I change the style of the box? =
+
+In your template's CSS file, add a definition for `.scripturizer_showhide`. Example:
+
+.scripturizer_showhide {
+		display: none; 
+		padding: 1em; 
+		border: solid DarkGrey 1px;
+}
+
+= How do I change amount of space around the open in new window icon? =
+
+In your template's CSS file, add a definition for `.scripturizer_newwindow`. Example:
+
+.scripturizer_newwindow {
+	margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 5px; border: 0px;
+}
 
 = How do I contact the author? =
 Contact [Laurence O'Donnell](http://lo.notsorry.net/contact/ "Contact Laurence O'Donnell")

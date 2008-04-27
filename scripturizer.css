@@ -1,14 +1,12 @@
 .tooltip {
 		max-width: 30em;
 		text-align: left;
-        padding: 0.5em;
-        margin: 0;
-        background-color: #333;
-        color: #FFF
+      padding: 0.5em;
+      margin: 0;
+      background-color: #333;
+      color: #FFF
 }
-
 .scripturizer_showhide {
-		white-space: pre; 
 		display: none; 
 		padding: 1em; 
 		border: solid DarkGrey 1px;
