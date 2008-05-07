@@ -211,102 +211,111 @@ if (!get_option('scripturizer_default_translation')) { //Show install instructio
 ?>
 
 
-    <div class="wrap">
-        <h2><?php _e('Scripturizer', 'Scripturizer'); ?></h2>
-        <form method="post">
-            <h3><?php _e('General Options', 'Scripturizer'); ?></h3>
-        <fieldset class="options">
-
-           <p>
-            <label for="scripturizer_default_translation">
-           <b><?php _e('Default Bible Translation', 'Scripturizer'); ?></b>
-           <br /><?php _e('The Scripturizer supports any version from the <a href="http://www.biblegateway.com" title="Go to Bible Gateway">Bible Gateway</a> plus ESV, NET, NRSV, and LXX.', 'Scripturizer'); ?>
-
-
-           <br /><select name="scripturizer_default_translation">
-		   <?php
-			if (get_option('scripturizer_default_translation') == ''){
-                    $scripturizer_default_translation='ESV';
-                }else {
-                 $scripturizer_default_translation=get_option('scripturizer_default_translation');
-            }
-
-			foreach ($scripturizer_translations as $translation => $v) {
-				if (strcmp($v['abbrv'], $scripturizer_default_translation)) {
-					echo "<option value='{$v['abbrv']}'>".$v['name'].' ('. $v['abbrv'] .')</option>';
-				} else {
-					echo "<option value='{$v['abbrv']}' selected>".$v['name'].' ('. $v['abbrv'] .')</option>';
-				}
-			}
-			?>
-			</select>
-
-           </label>
-           </p>
-
-            <p>
+<div class="wrap">
+	<h2><?php _e('Scripturizer', 'Scripturizer'); ?></h2>
+   <form method="post">
+   	<h3><?php _e('General Options', 'Scripturizer'); ?></h3>
             
-           <b><?php _e('Open Scripture in New Window', 'Scripturizer'); ?></b><br />
-<?php _e('Would you like links to open in a new window?', 'Scripturizer'); ?>
-           <br />
-		  <label><input name="scripturizer_link_window" type="radio" id="scripturizer_link_window" value="0" <?php checked('0', get_option('scripturizer_link_window')); ?> /> No</label>&emsp;
-		   <label><input name="scripturizer_link_window" type="radio" id="scripturizer_link_window" value="1" <?php checked('1', get_option('scripturizer_link_window')); ?> /> Via Icon <a href="http://biblegateway.com/bible?version=31&amp;passage=Romans+12%3A1-2" class="scripturizer_newwindow" title="Open this passage in a new browser window" target="_new"><img src="<?PHP get_settings('home'); ?>/wp-content/plugins/the-holy-scripturizer/new-window.gif" alt="Open Link in New Window" /></a></label>&emsp;
-           <label><input name="scripturizer_link_window" type="radio" id="scripturizer_link_window" value="2" <?php checked('2', get_option('scripturizer_link_window')); ?> /> Always</label>&emsp;
+		<table class="form-table">
+			<tbody>
+				<tr valign="top">
+					<th scope="row">
+						<label for="scripturizer_default_translation">
+							<?php _e('Default Bible Translation', 'Scripturizer'); ?>
+						</label>
+           		</th>
+           		<td>
+						<select name="scripturizer_default_translation">
+						<?php
+						if (get_option('scripturizer_default_translation') == ''){
+									  $scripturizer_default_translation='ESV';
+								 }else {
+								  $scripturizer_default_translation=get_option('scripturizer_default_translation');
+							}
+			
+						foreach ($scripturizer_translations as $translation => $v) {
+							if (strcmp($v['abbrv'], $scripturizer_default_translation)) {
+								echo "<option value='{$v['abbrv']}'>".$v['name'].' ('. $v['abbrv'] .')</option>';
+							} else {
+								echo "<option value='{$v['abbrv']}' selected>".$v['name'].' ('. $v['abbrv'] .')</option>';
+							}
+						}
+						?>
+						</select>
+						<br />
+					  <?php _e('The Scripturizer supports any version from the <a href="http://www.biblegateway.com" title="Go to Bible Gateway">Bible Gateway</a> plus ESV, NET, NRSV, and LXX.', 'Scripturizer'); ?>
+				  </td>
+				</tr>
+				<tr valign="top">
+					<th scope="row">
+						<?php _e('Open in New Window', 'Scripturizer'); ?>
+					</th>
+					<td>
+						<?php _e('Would you like links to open in a new window?', 'Scripturizer'); ?>
+						<br />
+						<input name="scripturizer_link_window" type="radio" id="scripturizer_link_window" value="0" <?php checked('0', get_option('scripturizer_link_window')); ?> /> No</label>&emsp;
+						<label><input name="scripturizer_link_window" type="radio" id="scripturizer_link_window" value="1" <?php checked('1', get_option('scripturizer_link_window')); ?> /> Via Icon <a href="http://biblegateway.com/bible?version=31&amp;passage=Romans+12%3A1-2" class="scripturizer_newwindow" title="Open this passage in a new browser window" target="_new"><img src="<?PHP get_settings('siteurl'); ?>/wp-content/plugins/the-holy-scripturizer/new-window.gif" alt="Open Link in New Window" /></a></label>&emsp;
+					  <label><input name="scripturizer_link_window" type="radio" id="scripturizer_link_window" value="2" <?php checked('2', get_option('scripturizer_link_window')); ?> /> Always</label>
+					  
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	<h3><?php _e('Additional Features', 'Scripturizer'); ?></h3>
+	 <p>
+		<?php _e('This section allows you to take advantage of the ESV Bible Web Service in order to display the text of the Bible verses that you reference in your posts and pages.', 'Scripturizer'); ?>
+   </p>
 
-            </p>
-
-        </fieldset>
-<p>&nbsp;</p>
-            <h3><?php _e('Additional Features', 'Scripturizer'); ?></h3>
-            <p><b><?php _e('Overview', 'Scripturizer'); ?></b><br />
-            <?php _e('This section allows you to take advantage of the ESV Bible Web Service in order to display the text of the Bible verses that you reference in your posts and pages.', 'Scripturizer'); ?>
-            </p>
-
-            <p><?php _e('Please note that useing the ESV Web Service comes with some conditions. Please <a href="http://www.esvapi.org/#conditions" target="_new">familiarize yourself with these conditions</a> <b>before</b> activating the following options options.', 'Scripturizer'); ?>
-            </p>
-            <fieldset class="options">
-
-				<p>
-            <label for="scripturizer_esv_key">
-            <?php 
-            // information about keyless options at: http://www.esv.org/blog/2005/10/web.service.keyless 
-            ?>
-            <b><?php _e('ESV Web Service Key', 'Scripturizer'); ?></b><br />
-            <?php _e('Use <b><code>IP</code></b> as your key. However, you may run into access limits if you make a lot of queries (over 5,000) or if your website shares an IP address with other websites (common). If that is the case apply for a unique key at <a href="http://www.esvapi.org/signup">http://www.esvapi.org/signup</a>', 'Scripturizer' ); ?><br />
-            <input type="text" name="scripturizer_esv_key" value="<?php
-            if (!get_option('scripturizer_esv_key')){
+	<p>
+		<?php _e('Please note that useing the ESV Web Service comes with some conditions. Please <a href="http://www.esvapi.org/#conditions" target="_new">familiarize yourself with these conditions</a> <b>before</b> activating the following options options.', 'Scripturizer'); ?>
+   </p>
+            
+		<table class="form-table">
+			<tbody>
+				<tr valign="top">
+					<th scope="row">
+           			<label for="scripturizer_esv_key"><?php _e('ESV Web Service Key', 'Scripturizer'); ?></label>
+           		</th>
+           		<td>
+           		 <?php // information about keyless options at: http://www.esv.org/blog/2005/10/web.service.keyless             ?>
+					 <input type="text" name="scripturizer_esv_key" value="<?php
+					 if (!get_option('scripturizer_esv_key')){
                 echo 'IP';
-            }else {
-             echo get_option('scripturizer_esv_key');
-            } ?>" size="30" />
-            </label>
-            </p>
-            
-            <p>
-           <b><?php _e('Show/Hide link to display the ESV text', 'Scripturizer'); ?></b>
-           <br />
-		  <input name="scripturizer_xml_show_hide" type="checkbox" id="scripturizer_xml_show_hide" value="1" <?php checked('1', get_option('scripturizer_xml_show_hide')); ?> /><?php _e('<label for="scripturizer_xml_show_hide">Use [show/hide] link. </label>Exampe: <a href="http://biblegateway.com/bible?version=31&amp;passage=Romans+12%3A1-2" class="bibleref" >Romans 12:1-2</a> <a href="javascript://" onclick="showhide(\'scripturizer1995956029\');"><small>[show/hide]</small></a><span id="scripturizer1995956029" class="scripturizer_showhide">I appeal to you therefore, brothers, by the mercies of God, 
-to present your bodies as a living sacrifice, holy and acceptable to God, 
-which is your spiritual worship. Do not be conformed to this world, 
-but be transformed by the renewal of your mind, that by testing you may 
-discern what is the will of God, what is good and acceptable and 
-perfect. (ESV)
-<br /><a href="http://www.esv.org/"><img src="http://www.esv.org/assets/buttons/small.7.png" alt="This text is from the ESV Bible. Visit www.esv.org to learn about the ESV." title="Visit www.esv.org to learn about the ESV Bible" width="80" height="21" /></a></span>', 'Scripturizer'); ?>
-           </p>
-           
-           <p>
-           <label for="scripturizer_xml_tooltip">
-           <b><?php _e('Rollover Tool Tip to display the text from the ESV', 'Scripturizer'); ?></b>
-           <br />
-           <input name="scripturizer_xml_tooltip" type="checkbox" id="scripturizer_xml_tooltip" value="1" <?php checked('1', get_option('scripturizer_xml_tooltip')); ?> />
+            		}else {
+             		echo get_option('scripturizer_esv_key');
+            		} ?>" size="30" />
+            		<br />
+						<?php _e('Use <b><code>IP</code></b> as your key. However, you may run into access limits if you make a lot of queries (over 5,000) or if your website shares an IP address with other websites (common). If that is the case apply for a unique key at <a href="http://www.esvapi.org/signup">http://www.esvapi.org/signup</a>', 'Scripturizer' ); ?>
+           		</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row">
+						<?php _e('Show/Hide link', 'Scripturizer'); ?>
+					</th>
+					<td>
+					  <input name="scripturizer_xml_show_hide" type="checkbox" id="scripturizer_xml_show_hide" value="1" <?php checked('1', get_option('scripturizer_xml_show_hide')); ?> /><?php _e('<label for="scripturizer_xml_show_hide">Use [show/hide] link. </label>Exampe: <a href="http://biblegateway.com/bible?version=31&amp;passage=Romans+12%3A1-2" class="bibleref" >Romans 12:1-2</a> <a href="javascript://" onclick="showhide(\'scripturizer1995956029\');"><small>[show/hide]</small></a><span id="scripturizer1995956029" class="scripturizer_showhide">I appeal to you therefore, brothers, by the mercies of God, to present your bodies as a living sacrifice, holy and acceptable to God,	which is your spiritual worship. Do not be conformed to this world, 
+						but be transformed by the renewal of your mind, that by testing you may discern what is the will of God, what is good and acceptable and perfect. (ESV)
+						<br /><a href="http://www.esv.org/"><img src="http://www.esv.org/assets/buttons/small.7.png" alt="This text is from the ESV Bible. Visit www.esv.org to learn about the ESV." title="Visit www.esv.org to learn about the ESV Bible" width="80" height="21" /></a></span>', 'Scripturizer'); ?>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row">
+						<label for="scripturizer_xml_tooltip">
+						<?php _e('Rollover Tool Tip', 'Scripturizer'); ?>
+						</label>
+           		</th>
+          		<td>
+          			<input name="scripturizer_xml_tooltip" type="checkbox" id="scripturizer_xml_tooltip" value="1" <?php checked('1', get_option('scripturizer_xml_tooltip')); ?> />
 			<?php _e('Use rollover tool tip. Example: <a href="http://biblegateway.com/bible?version=31&amp;passage=John+3%3A16" class="bibleref" title="&quot;For God so loved the world, that he gave his only Son, 
 that whoever believes in him should not perish but have eternal life. (ESV)">John 3:16</a>', 'Scripturizer'); ?>
-           </label>
-           </p>
-
-            <p>
-            <b><?php _e('Advanced Options', 'Scripturizer'); ?></b><br />
-           
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row">
+           			<?php _e('Advanced Options', 'Scripturizer'); ?>
+           		</th>
+           		<td>
+           	<p>
             <?php _e('For more information about these options visit the "Plan Text Output" section of the <a href="http://www.esvapi.org/api#plain-text-output">ESV Bible Web Service API documentation</a>.', 'Scripturizer'); ?>
             </p>
                 <?php
@@ -356,11 +365,11 @@ that whoever believes in him should not perish but have eternal life. (ESV)">Joh
  			
  			<input name="scripturizer_esv_query_options[10]" type="hidden" id="scripturizer_esv_query_options[10]" value="line-length=0" />
 				</p>
+			</td>
+			</tr>
+			</tbody>
+			</table>
 
-
- </label>
-            </p>
-        </fieldset>
 
     <p class="submit">
     <input type="submit" name="info_update" value="<?php _e('Update Options', 'Scripturizer') ?>" />
@@ -384,13 +393,6 @@ that whoever believes in him should not perish but have eternal life. (ESV)">Joh
             <li><?php _e('Updates about the newest releases, features, and development dreams are located at <a href="http://scripturizer.wordpress.com">The Official Scripturizer HQ</a>.', 'Scripturizer'); ?></li>
             <li><?php _e('Report bugs and request new features via the <a href="http://code.google.com/p/scripturizer/issues/list" target="scripturizer">Scripturizer Google Code Project Site</a>.', 'Scripturizer'); ?></li>
         </ul>
-    </fieldset>
-
-
-    <fieldset class="options">
-        <legend><b><?php _e('Credits', 'Scripturizer'); ?></b></legend>
-
-        <p><?php _e('The original coding props go to <a href="http://www.healyourchurchwebsite.com/">Dean Peters</a> for his original Scripturizer code. After Dean\'s original work <a href="http://xastanford.org/archives/scripturizer-in-php/">Glen</a> turned Scripturizer into a Wordpress plugin. <a href="http://LaurenceO.com" title="Scripturizer info can be found in the Webmaster/Scripturizer category on LaurenceO.com">Laurence</a> maintained Scripturizer from WordPress 1.5 through WordPress 2.2. Peter has been adding enchancements since WordPress 2.3. The authors can be contacted through their respective web sites (but please see below for support options).', 'Scripturizer'); ?></p>
     </fieldset>
 
     </div>
@@ -489,7 +491,7 @@ global $scripturizer_translations;
 }
 
 function buildNewWindowLink($link, $volume, $book, $verse) {
-    $new_window_link = sprintf('<a href="%s%s" class="scripturizer_newwindow" title="Open this passage in a new browser window" target="_new"><img src="' .get_settings('home') .'/wp-content/plugins/the-holy-scripturizer/new-window.gif" alt="Open Link in New Window" /></a>',$link,htmlentities(urlencode(trim("$volume $book $verse"))));
+    $new_window_link = sprintf('<a href="%s%s" class="scripturizer_newwindow" title="Open this passage in a new browser window" target="_new"><img src="' .get_settings('siteurl') .'/wp-content/plugins/the-holy-scripturizer/new-window.gif" alt="Open Link in New Window" /></a>',$link,htmlentities(urlencode(trim("$volume $book $verse"))));
 
     return $new_window_link;
 }
@@ -975,7 +977,7 @@ function scripturizeComment($comment_ID) {
 if (! function_exists('scripturizerHeader')) {
 
     function scripturizerHeader() {
-    	echo '<link rel="stylesheet" type="text/css" media="screen" href="'.get_settings('home') .'/wp-content/plugins/the-holy-scripturizer/scripturizer.css"/></style>';
+    	echo '<link rel="stylesheet" type="text/css" media="screen" href="'.get_settings('siteurl') .'/wp-content/plugins/the-holy-scripturizer/scripturizer.css"/></style>';
     }
 }
 
@@ -1019,8 +1021,8 @@ if (! function_exists('esvToolTipHeader')) {
     function esvToolTipHeader() {
 
         $content = "
-            <script type=\"text/javascript\" src=\"".get_settings('home') ."/wp-includes/js/prototype.js\"></script>
-            <script type=\"text/javascript\" src=\"".get_settings('home') ."/wp-content/plugins/the-holy-scripturizer/tooltip-v0.2.js\"></script>
+            <script type=\"text/javascript\" src=\"".get_settings('siteurl') ."/wp-includes/js/prototype.js\"></script>
+            <script type=\"text/javascript\" src=\"".get_settings('siteurl') ."/wp-content/plugins/the-holy-scripturizer/tooltip-v0.2.js\"></script>
             <script type=\"text/javascript\">
 			Event.observe(window,\"load\",function() {
 				   $$(\".bibleref\").findAll(function(node){

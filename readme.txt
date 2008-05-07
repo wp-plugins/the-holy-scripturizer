@@ -1,10 +1,10 @@
 === The Holy Scripturizer ===
-Contributors: laurence0
+Contributors: laurence0, petervcook
 Donate link: http://lo.notsorry.net
 Tags: Bible, Scripture, Christian, post, comments, formatting, ajax
 Requires at least: 1.5
-Tested up to: 2.2
-Stable tag: 1.7
+Tested up to: 2.3
+Stable tag: 1.8
 
 Automatically link your Bible references to Bible sites. Works with almost every major Bible version in many languages. Easy setup; customizable.
 
@@ -16,7 +16,7 @@ No special tags or extra coding are needed. Simply type a Bible reference, like 
 
 = Scripturizer's basic features include: =
 * Easy to install -- just 2-clicks.
-* Easy to administer via the admin panel under the Options page (`Options --> Scripturizer`).
+* Easy to administer via the admin panel under the Options/Settings tab (`Options/Settings --> Scripturizer`).
 * No proprietary markup tags. You don’t have to use special tags (such as [bible]Genesis 1:1[/bible]) around Bible references.
 * Optional open Bible links in new windows/tabs.
 * Automatically include the ESV text on rollover or with a show/hide link next to references.
@@ -27,21 +27,21 @@ No special tags or extra coding are needed. Simply type a Bible reference, like 
 
 == Installation ==
 
-After downloading `scripturizer.php`, The Holy Scripturizer is installed and initialized in **two clicks**.
+The Holy Scripturizer is installed and initialized in **two clicks**.
 
 = Click 1: Installation =
 
 1. Upload `scripturizer.php` to your `/wp-content/plugins/` directory.
-1. (If you want to use the open in new window option, you also need to upload `new-window.gif` to your `/wp-content/` directory.)
+1. If an older version of scripurizer.php exists, remove it.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 = Click 2: Initialization =
 
-1. Go to the Scripturizer admin panel in your Wordpress console (`Options --> Scripturizer`).
+1. Go to the Scripturizer admin panel in your Wordpress console (`Options/Settings --> Scripturizer`).
 1. Choose your default settings, and then press the **Update Options** button. That's it!
 
 
-== Usage Instructions ==
+== Usage ==
 
 = Link to a Scripture Reference with Default Version =
 
@@ -71,7 +71,7 @@ The list of available versions with their abbreviations is below.
 
 = Default Bible Version and Supported Versions =
 
-Upon activation, the default Bible version is set to the English Standard Version (ESV). The default can be changed simply by changing the default Bible option on the `options --> Scripturizer` page in your Wordpress control panel.
+Upon activation, the default Bible version is set to the English Standard Version (ESV). The default can be changed simply by changing the default Bible option on the `Options/Settings --> Scripturizer` page in your Wordpress control panel.
 
 Scripturizer supports many versions (soon to be all versions) from the Bible Gateway plus the NET, NRSV, and LXX. Therefore, the list of supported versions with their corresponding abbreviations (i.e. the abbreviations that you should use in your links) is as follows:
 
@@ -109,43 +109,75 @@ Scripturizer supports many versions (soon to be all versions) from the Bible Gat
 1. Wycliffe New Testament (WYC)
 1. Young’s Literal Translation (YLT)
 
+= Additional Features (ESV only) =
 
-== Frequently Asked Questions ==
+1. Display the scripture when the user's mouse rollsover the reference.
+1. Create [show/hide] link for viewing the scripture without having to leave the current page.
 
-= What configuration options does Scripturizer offer? =
-See the [Usage Instructions](http://wordpress.org/extend/plugins/the-holy-scripturizer/other_notes/ "Usage instructions for the Holy Scripturizer")
+= CSS Styles =
 
-= How do I change the style of the rollover box? =
+All elements that Scripturizer adds have clean CSS classes in order to make it easy for you to match the look with your site's template.
 
-In your template's CSS file, add a definition for `.tooltip`. Example:
+Tool Tip example:
 
-.tooltip {
+`.tooltip {
 		max-width: 30em;
 		text-align: left;
       padding: 0.5em;
       margin: 0;
       background-color: #333;
       color: #FFF
-}
+}`
 
-= How do I change the style of the box? =
+Box displayed after [show/hide] click is clicked:
 
-In your template's CSS file, add a definition for `.scripturizer_showhide`. Example:
-
-.scripturizer_showhide {
+`.scripturizer_showhide {
 		display: none; 
 		padding: 1em; 
-		border: solid DarkGrey 1px;
-}
+		border-style: solid ;
+		border-color: DarkGrey;
+		border-width: 1px;
+}`
 
-= How do I change amount of space around the open in new window icon? =
 
-In your template's CSS file, add a definition for `.scripturizer_newwindow`. Example:
+Open in new window icon:
 
-.scripturizer_newwindow {
-	margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 5px; border: 0px;
-}
+`.scripturizer_newwindow {
+	margin-top: 0px; 
+	margin-right: 0px; 
+	margin-bottom: 0px; 
+	margin-left: 5px; 
+	border: 0px;
+}`
 
-= How do I contact the author? =
-Contact [Laurence O'Donnell](http://lo.notsorry.net/contact/ "Contact Laurence O'Donnell")
+= Credits =
 
+Initial vision and Perl module:
+[Dean Peters](http://www.HealYourChurchWebSite.com)
+	
+Additional Credits For Perl version:
+[Jonathan Fox](http://vulpecula.us/~jon/)
+[Jason Rust](http://rustyparts.com/blip/)
+[Joseph Markey](http://thegreatlands.com/archives/000032.html)
+[Brian A Thomas]
+(http://www.brianathomas.com/archives/2005/01/17/editing-scripturizer/)
+[Rob Hulson](http://www.robhulson.com/archives/000073.html)
+ 	
+Port to PHP for Wordpress
+[Glen Davis](http://www.glenandpaula.com)
+
+Wordpress Documentation
+[Chip Bennett](http://www.chipbennett.net)
+
+Maintaining Code
+WordPress 1.5 - 2.2: [Laurence O'Donnell](http://laurenceo.com)
+WordPress 2.3 - 2.5: [Peter V Cook](http://www.petervcook.com)
+
+ 	
+JavaScript:
+show/hide link is modified from (http://lists.evolt.org/archive/Week-of-Mon-20020624/116151.html)
+ToolTip for Prototype by [Jonathan Weiss](http://blog.innerewut.de/tooltip)
+
+== Screenshots ==
+
+1. Scripture link with rollover Tool Tip option turned on
