@@ -1,3 +1,11 @@
+#scripturizer_advanced label{
+	width: 4.5em;
+	float: left;
+	
+}
+#scripturizer_advanced br{
+	clear: both;
+}
 .tooltip {
 		max-width: 30em;
 		text-align: left;

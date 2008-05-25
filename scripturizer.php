@@ -310,7 +310,7 @@ if (!get_option('scripturizer_default_translation')) { //Show install instructio
 that whoever believes in him should not perish but have eternal life. (ESV)">John 3:16</a>', 'Scripturizer'); ?>
 					</td>
 				</tr>
-				<tr valign="top">
+				<tr valign="top" id="scripturizer_advanced">
 					<th scope="row">
            			<?php _e('Advanced Options', 'Scripturizer'); ?>
            		</th>
@@ -356,10 +356,13 @@ that whoever believes in him should not perish but have eternal life. (ESV)">Joh
  			
  			<label>
 			<input name="scripturizer_esv_query_options[8]" type="radio" id="scripturizer_esv_query_options[8]" value="include-headings=true&include-subheadings=true" <?php checked('include-headings=true&include-subheadings=true', $LO_esv_form_qo[8]); ?> /> Yes</label>
+			<label>
  			<input name="scripturizer_esv_query_options[8]" type="radio" id="scripturizer_esv_query_options[8]" value="include-headings=false&include-subheadings=false" <?php checked('include-headings=false&include-subheadings=false', $LO_esv_form_qo[8]); ?> /> No</label>
  			<strong>Include Headings and Subheadings </strong>
  			<br />
+ 			<label>
  			<input name="scripturizer_esv_query_options[9]" type="radio" id="scripturizer_esv_query_options[9]" value="include-selahs=true" <?php checked('include-selahs=true', $LO_esv_form_qo[9]); ?> /> Yes</label>
+ 			<label>
  			<input name="scripturizer_esv_query_options[9]" type="radio" id="scripturizer_esv_query_options[9]" value="include-selahs=false" <?php checked('include-selahs=false', $LO_esv_form_qo[9]); ?> /> No</label>
  			<strong>Include Selahs</strong> common in Psalms
  			
@@ -374,26 +377,9 @@ that whoever believes in him should not perish but have eternal life. (ESV)">Joh
     <p class="submit">
     <input type="submit" name="info_update" value="<?php _e('Update Options', 'Scripturizer') ?>" />
     <input type="submit" name="uninstall" value="<?php _e('Reset/Uninstall Scripturizer', 'Scripturizer') ?>" />
+    <a href="http://scripturizer.wordpress.com/usage"><?php _e('Help', 'Scripturizer'); ?></a>
     </p>
     </form>
-
-    <fieldset class="options">
-        <legend><b><?php _e('Usage Instructions', 'Scripturizer'); ?></b></legend>
-
-<p><a href="http://scripturizer.wordpress.com/usage/">See instructions for how to make links</a> with your default Bible version and verse-specific versions.</p>
-
-    </fieldset>
-
-
-
-    <fieldset class="options">
-        <legend><b><?php _e('Updates and Bug Tracking', 'Scripturizer'); ?></b></legend>
-
-        <ul>
-            <li><?php _e('Updates about the newest releases, features, and development dreams are located at <a href="http://scripturizer.wordpress.com">The Official Scripturizer HQ</a>.', 'Scripturizer'); ?></li>
-            <li><?php _e('Report bugs and request new features via the <a href="http://code.google.com/p/scripturizer/issues/list" target="scripturizer">Scripturizer Google Code Project Site</a>.', 'Scripturizer'); ?></li>
-        </ul>
-    </fieldset>
 
     </div>
 
@@ -1041,14 +1027,14 @@ if (! function_exists('esvToolTipHeader')) {
 ##### ADD ACTIONS AND FILTERS
 add_action('wp_head', 'scripturizerHeader', 5);
 add_action('admin_head', 'scripturizerHeader', 5);
+add_action('admin_head', 'esvShowHideHeader', 5);
+add_action('admin_head', 'esvToolTipHeader', 5);
 
 if (get_option('scripturizer_xml_show_hide')) { // Load the javascript if the xml show/hide option is turned on
     add_action('wp_head', 'esvShowHideHeader', 5);
-    add_action('admin_head', 'esvShowHideHeader', 5);
 }
 if (get_option('scripturizer_xml_tooltip')) { // Load the javascript if the tooltip option is turned on
     add_action('wp_head', 'esvToolTipHeader', 5);
-    add_action('admin_head', 'esvToolTipHeader', 5);
 }
 add_filter('the_content','scripturize'); // Scripturize the content of posts and pages
 add_filter('comment_text','scripturize'); // Scripturize the comments of posts and pages

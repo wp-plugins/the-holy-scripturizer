@@ -173,9 +173,8 @@ Maintaining Code
 WordPress 1.5 - 2.2: [Laurence O'Donnell](http://laurenceo.com)
 WordPress 2.3 - 2.5: [Peter V Cook](http://www.petervcook.com)
 
- 	
 JavaScript:
-show/hide link is modified from (http://lists.evolt.org/archive/Week-of-Mon-20020624/116151.html)
+show/hide link is modified from [this script](http://lists.evolt.org/archive/Week-of-Mon-20020624/116151.html)
 ToolTip for Prototype by [Jonathan Weiss](http://blog.innerewut.de/tooltip)
 
 == Screenshots ==
