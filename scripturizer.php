@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: The Holy Scripturizer
-Version: 1.8b
+Version: 1.8
 Plugin URI: http://scripturizer.wordpress.com
 Description: Automatically converts Bible references into hyperlinks pointed to major online Bible sites.
 Author: Dean Peters, ported by Glen Davis, updated by Laurence O'Donnell (v1.5-1.7) & Peter V Cook (v1.8)
@@ -253,8 +253,6 @@ global $scripturizer_translations;
 						}
 						?>
 						</select>
-						<br />
-					  <?php _e('The Scripturizer supports any version from the <a href="http://www.biblegateway.com" title="Go to Bible Gateway">Bible Gateway</a> plus ESV, NET, NRSV, and LXX.', 'Scripturizer'); ?>
 				  </td>
 				</tr>
 				<tr valign="top">
@@ -498,7 +496,7 @@ function buildNewWindowLink($link, $volume, $book, $verse) {
 
 function buildBiblerefTitle($translation, $volume, $book, $verse, $user_translation){
 	$book = str_replace('.','',$book);
-	if (get_option('scripturizer_xml_tooltip') && !is_feed()  && $user_translation == '') { // Insert ToolTip and include ESV verse text
+	if (get_option('scripturizer_xml_tooltip') && !is_feed()  && ($user_translation == '' || $user_translation == 'ESV')) { // Insert ToolTip and include ESV verse text
 		 $output= getEsvText($volume, $book, $verse);
     } else {
 		$output = $translation .' ' .$volume.$book. ' ' .$verse;
@@ -510,7 +508,6 @@ function buildBiblerefTitle($translation, $volume, $book, $verse, $user_translat
 
 function scripturizeLinkReference($reference='',$volume='',$book='',$verse='',$user_translation='',$translation='') {
 
-echo "trans:".$translation." user_translation:".$user_translation;
 global $scripturizer_translations;
     if ($volume) {
        $volume = str_replace('III','3',$volume);
@@ -527,15 +524,15 @@ global $scripturizer_translations;
 		return $reference;
 	}
 
-   if(!$translation) {
+//   if(!$translation) {
          if (!$user_translation) {
              $translation = get_option('scripturizer_default_translation');
          } else {
              $translation = $user_translation;
          }
-   } else {
-       $translation = trim($translation,' ()'); // strip out any parentheses that might have made it this far
-   }
+//   } else {
+//       $translation = trim($translation,' ()'); // strip out any parentheses that might have made it this far
+//   }
 	
    // if necessary, just choose part of the verse reference to pass to the web interfaces
    // they wouldn't know what to do with John 5:1-2, 5, 10-13 so I just give them John 5:1-2
@@ -580,18 +577,15 @@ global $scripturizer_translations;
 	// example URL http://www.zhubert.com/bible?book=Matthew&chapter=2&verse=3
 	// there's also an XML interface to this content - could do a trick like I propose with the ESV
              $url = 'http://www.zhubert.com/bible';
-			$chapter=zhubertize_chapter($verse);
-			$verse=zhubertize_verse($verse);
+			//$chapter=zhubertize_chapter($verse);
+			//$verse=zhubertize_verse($verse);
 			$book=zhubertize_book($volume.' '.$book);
-             $url = sprintf('%s?book=%s&amp;chapter=%d&amp;verse=%d',$url,htmlentities(urlencode(trim($book))),$chapter,$verse);
+             $url = sprintf('%s?source=greek&verseref=%s',$url,htmlentities(urlencode(trim("$volume $book $verse"))));
     break;
 	
 	default:
 	// Bible Gateway has a ton of translations, so just make it the default instead of checking for each one
-	// $translation_regex takes care of ensuring that only valid translations make it this far, anyway
-	// api at http://biblegateway.com/usage/linking/
-
-	// Due to recent API updates, I added the following code to convert tranlation names (i.e. NIV) to
+	//The following code to converts tranlation names (i.e. NIV) to
 	// the corresponding IDs per http://www.biblegateway.com/usage/linking/versionslist.php (LO; 3/10/07)
 
 	foreach ($scripturizer_translations as $t => $v) { //Get the translation ID from the global array
@@ -607,7 +601,7 @@ global $scripturizer_translations;
     }
 
 	$title = buildBiblerefTitle($translation, $volume, $book, $verse, $user_translation); // title attribute now follows the bibleref semantic standards
-	if (get_option('scripturizer_xml_tooltip') && !is_feed()  && $user_translation == '') { // Insert ToolTip and include ESV verse text
+	if (get_option('scripturizer_xml_tooltip') && !is_feed()  && ($user_translation == '' || $user_translation == 'ESV')) { // Insert ToolTip and include ESV verse text
 		$class = 'bibleref scripturizer_tooltip';
 	} else {
 		$class = 'bibleref';
@@ -631,7 +625,7 @@ global $scripturizer_translations;
 		$link.=$libronix;
 	}
 	# Insert Show/Hide link and include ESV verse text
-	if (get_option('scripturizer_xml_show_hide') && !is_feed() && $user_translation == '') {
+	if (get_option('scripturizer_xml_show_hide') && !is_feed() && ($user_translation == '' || $user_translation == 'ESV')) {
 	
 		$esvResponse = getEsvText($volume, $book, $verse);
 

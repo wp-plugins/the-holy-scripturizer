@@ -11,7 +11,7 @@ Automatically link your Bible references to Bible sites. Works with almost every
 == Description ==
 
 Automaticallly hyperlink Bible references. No special tags or extra coding are needed. Simply type a Bible reference, like John 3:16, and it is converted automatically to [John 3:16](http://www.gnpcb.org/esv/search/?q=john+3.16 "Read John 3:16").
-
+svn
 Scripturizer uses PHP-based filtering to automatically convert Bible references in your posts, pages, and comments into hyperlinks which point to major online Bible websites, such as the [Bible Gateway](http://www.biblegateway.com/ "The Bible Gateway"), [NET Bible](http://www.bible.org/ "The NET Bible"), the [ESV Bible](http://www.gnpcb.org/esv/ "The ESV Bible"), and others.
 
 = Features: =
@@ -32,8 +32,12 @@ Scripturizer uses PHP-based filtering to automatically convert Bible references 
 = New in Version 1.8 =
 
 * Added rollover tooltips
+* ESV Show/Hide links can now be used even in the default translation links to another translation
 * Show/Hide links changed from [+/-] to [show]
 * Easier installation
+* Streamlined Code & Small File Size
+* Redesigned Admin Panel to match WordPress 2.5
+* CSS Code moved to an external file
 
 == Installation ==
 
@@ -174,17 +178,18 @@ Additional Credits For Perl version:
 Port to PHP for Wordpress
 [Glen Davis](http://www.glenandpaula.com)
 
-Wordpress Documentation
+WordPress Documentation
 [Chip Bennett](http://www.chipbennett.net)
 
 Maintaining Code
-WordPress 1.5 - 2.2: [Laurence O'Donnell](http://laurenceo.com)
-WordPress 2.3 - 2.5: [Peter V Cook](http://www.petervcook.com)
+v1.5-1.7: [Laurence O'Donnell](http://laurenceo.com)
+v1.8: [Peter V Cook](http://www.petervcook.com)
 
 JavaScript:
 show/hide link is modified from [this script](http://lists.evolt.org/archive/Week-of-Mon-20020624/116151.html)
-ToolTip for Prototype by [Jonathan Weiss](http://blog.innerewut.de/tooltip)
+[ToolTip](http://blog.innerewut.de/tooltip) for Prototype by [Jonathan Weiss](http://blog.innerewut.de/tooltip)
 
 == Screenshots ==
 
-1. Scripture link with rollover Tool Tip option turned on
+1. Just type a Bible reference and a link to read that scripture is automatically added. (Shown with optional open-in-new-window icon.)
+2. Scripture link with rollover Tool Tip option turned on.
