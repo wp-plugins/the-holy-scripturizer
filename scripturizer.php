@@ -4,8 +4,7 @@ Plugin Name: The Holy Scripturizer
 Version: 1.8b
 Plugin URI: http://scripturizer.wordpress.com
 Description: Automatically converts Bible references into hyperlinks pointed to major online Bible sites.
-Author: Dean Peters, ported by Glen Davis, updated by Laurence O'Donnell & Peter V Cook (v1.8)
-Author URI: http://www.healyourchurchwebsite.com/
+Author: Dean Peters, ported by Glen Davis, updated by Laurence O'Donnell (v1.5-1.7) & Peter V Cook (v1.8)
 */
 
 
@@ -35,7 +34,7 @@ $scripturizer_translations[4]['name'] = 'Slovo na cestu';
 $scripturizer_translations[4]['gateway_id'] = '29';
 
 $scripturizer_translations[5]['abbrv'] = 'DN1933';
-$scripturizer_translations[5]['name'] = 'Dette er Biblen på dansk';
+$scripturizer_translations[5]['name'] = 'Detta är Bibeln på danska';
 $scripturizer_translations[5]['gateway_id'] = '';
 
 $scripturizer_translations[6]['abbrv'] = 'ELB';
@@ -43,7 +42,7 @@ $scripturizer_translations[6]['name'] = 'Elberfelder';
 $scripturizer_translations[6]['gateway_id'] = '54';
 
 $scripturizer_translations[7]['abbrv'] = 'HOF';
-$scripturizer_translations[7]['name'] = 'Hoffnung f�r Alle';
+$scripturizer_translations[7]['name'] = 'Hoffnung für Alle';
 $scripturizer_translations[7]['gateway_id'] = '33';
 
 $scripturizer_translations[8]['abbrv'] = 'LUTH1545';
@@ -152,7 +151,28 @@ foreach ($scripturizer_translations as $key => $row) {
 }
 array_multisort($n, SORT_ASC, $scripturizer_translations);
 
+/* Active Plugin */
 
+register_activation_hook( __FILE__, 'scripturizer_activate' );
+
+function scripturizer_activate() {
+	
+	if (!get_option('scripturizer_default_translation')) { 
+		update_option('scripturizer_default_translation', 'ESV');
+		update_option('scripturizer_link_window', '0');
+	  update_option('scripturizer_xml_show_hide', '');
+	  update_option('scripturizer_xml_tooltip', '1');
+	  update_option('scripturizer_esv_key', 'IP');
+	} //end if
+	if (!get_option('scripturizer_esv_query_options')) {
+			$LO_esv_form_qo = array(
+				"output-format=plain-text", "include-passage-references=false", "include-first-verse-numbers=false", "include-verse-numbers=false", "include-footnotes=false", "include-short-copyright=true", "include-passage-horizontal-lines=false", "include-heading-horizontal-lines=false", "include-headings=false&include-subheadings=false", 
+				"include-selahs=false", 
+				"line-length=0");
+	  update_option('scripturizer_esv_query_options', $LO_esv_form_qo);
+	 }
+	
+}
 
 ##### ADMIN CONSOLE #
 
@@ -167,8 +187,6 @@ if (! function_exists('scripturizer_add_options')) {
 // Show the admin page content
 function scripturizer_options_subpanel() {
 global $scripturizer_translations;
-// to do -- add libronix link
-// see http://www.logos.com/support/lbs/weblinking
     if (isset($_POST['info_update'])) { //Update/install options action
         update_option('scripturizer_default_translation', $_POST['scripturizer_default_translation']);
         update_option('scripturizer_link_window', $_POST['scripturizer_link_window']);
@@ -182,12 +200,20 @@ global $scripturizer_translations;
         </strong></p></div>
     <?php
     } elseif(isset($_POST['uninstall'])) { //Reset/uninstall action
-		$s_options_list = "scripturizer_default_translation|scripturizer_link_window|scripturizer_xml_show_hide|scripturizer_xml_tooltip|scripturizer_esv_key|scripturizer_esv_query_options";
-		$s_options = explode('|', $s_options_list);
-
+		$s_options = array(
+			"scripturizer_default_translation",
+			"scripturizer_link_window", 
+			"scripturizer_xml_show_hide",
+			"scripturizer_xml_tooltip",
+			"scripturizer_esv_key",
+			"scripturizer_esv_query_options",
+			"scripturizer_xml_css", // leftover from v1.7
+			"scripturizer_link_window_css" // leftover from v1.7
+		);
 		foreach($s_options as $x) {
 			delete_option($x);
-		}?>
+		}
+		?>
 
 		<div class="updated"><p><strong>
             <?php _e('Reset/Uninstall completed!', 'Scripturizer');?>
@@ -195,25 +221,10 @@ global $scripturizer_translations;
 <?php
 	}//end elseif ?>
 
-
-<?php
-if (!get_option('scripturizer_default_translation')) { //Show install instructions if no options are set ?>
-	<div class="updated">
-            <p><b><?php _e('IMPORTANT INSTALLATION INSTRUCTIONS!', 'Scripturizer'); ?></b></p>
-
-            <ol>
-                <li><?php _e('You must press the UPDATE OPTIONS button at least once to install the default settings.', 'Scripturizer'); ?></li>
-                <li><?php _e('If you mess up one of the following inputs, then clear the field (make it blank), hit "update options," and then the default values will reappear. Then, you <b>must hit "update options" again</b> in order to save the new value.', 'Scripturizer'); ?></li>
-            </ol>
-    </div>
-<?php
-}//end if - show install instructions
-?>
-
-
 <div class="wrap">
 	<h2><?php _e('Scripturizer', 'Scripturizer'); ?></h2>
    <form method="post">
+   <?php wp_nonce_field('update-options'); ?>
    	<h3><?php _e('General Options', 'Scripturizer'); ?></h3>
             
 		<table class="form-table">
@@ -254,7 +265,7 @@ if (!get_option('scripturizer_default_translation')) { //Show install instructio
 						<?php _e('Would you like links to open in a new window?', 'Scripturizer'); ?>
 						<br />
 						<input name="scripturizer_link_window" type="radio" id="scripturizer_link_window" value="0" <?php checked('0', get_option('scripturizer_link_window')); ?> /> No</label>&emsp;
-						<label><input name="scripturizer_link_window" type="radio" id="scripturizer_link_window" value="1" <?php checked('1', get_option('scripturizer_link_window')); ?> /> Via Icon <a href="http://biblegateway.com/bible?version=31&amp;passage=Romans+12%3A1-2" class="scripturizer_newwindow" title="Open this passage in a new browser window" target="_new"><img src="<?PHP get_settings('siteurl'); ?>/wp-content/plugins/the-holy-scripturizer/new-window.gif" alt="Open Link in New Window" /></a></label>&emsp;
+						<label><input name="scripturizer_link_window" type="radio" id="scripturizer_link_window" value="1" <?php checked('1', get_option('scripturizer_link_window')); ?> /> Via Icon <a href="http://biblegateway.com/bible?version=31&amp;passage=Romans+12%3A1-2" class="scripturizer_newwindow" title="Open this passage in a new browser window" target="_new"><img src="<?php get_settings('siteurl'); ?>/wp-content/plugins/the-holy-scripturizer/new-window.gif" alt="Open Link in New Window" /></a></label>&emsp;
 					  <label><input name="scripturizer_link_window" type="radio" id="scripturizer_link_window" value="2" <?php checked('2', get_option('scripturizer_link_window')); ?> /> Always</label>
 					  
 					</td>
@@ -267,7 +278,7 @@ if (!get_option('scripturizer_default_translation')) { //Show install instructio
    </p>
 
 	<p>
-		<?php _e('Please note that useing the ESV Web Service comes with some conditions. Please <a href="http://www.esvapi.org/#conditions" target="_new">familiarize yourself with these conditions</a> <b>before</b> activating the following options options.', 'Scripturizer'); ?>
+		<?php _e('Please note that using the ESV Web Service comes with some conditions. Please familiarize yourself with <a href="http://www.esvapi.org/#conditions" target="_new">these conditions</a> <b>before</b> activating the following options.', 'Scripturizer'); ?>
    </p>
             
 		<table class="form-table">
@@ -293,7 +304,7 @@ if (!get_option('scripturizer_default_translation')) { //Show install instructio
 						<?php _e('Show/Hide link', 'Scripturizer'); ?>
 					</th>
 					<td>
-					  <input name="scripturizer_xml_show_hide" type="checkbox" id="scripturizer_xml_show_hide" value="1" <?php checked('1', get_option('scripturizer_xml_show_hide')); ?> /><?php _e('<label for="scripturizer_xml_show_hide">Use [show/hide] link. </label>Exampe: <a href="http://biblegateway.com/bible?version=31&amp;passage=Romans+12%3A1-2" class="bibleref" >Romans 12:1-2</a> <a href="javascript://" onclick="showhide(\'scripturizer1995956029\');"><small>[show/hide]</small></a><span id="scripturizer1995956029" class="scripturizer_showhide">I appeal to you therefore, brothers, by the mercies of God, to present your bodies as a living sacrifice, holy and acceptable to God,	which is your spiritual worship. Do not be conformed to this world, 
+					  <input name="scripturizer_xml_show_hide" type="checkbox" id="scripturizer_xml_show_hide" value="1" <?php checked('1', get_option('scripturizer_xml_show_hide')); ?> /><?php _e('<label for="scripturizer_xml_show_hide">Use [show]/[hide] link. </label>Exampe: <a href="http://biblegateway.com/bible?version=31&amp;passage=Romans+12%3A1-2" class="bibleref" >Romans 12:1-2</a> <a href="javascript://" id="showhide1995956029" onclick="showhide(\'1995956029\');"><small>[show]</small></a><span id="scripturizer1995956029" class="scripturizer_showhide">I appeal to you therefore, brothers, by the mercies of God, to present your bodies as a living sacrifice, holy and acceptable to God,	which is your spiritual worship. Do not be conformed to this world, 
 						but be transformed by the renewal of your mind, that by testing you may discern what is the will of God, what is good and acceptable and perfect. (ESV)
 						<br /><a href="http://www.esv.org/"><img src="http://www.esv.org/assets/buttons/small.7.png" alt="This text is from the ESV Bible. Visit www.esv.org to learn about the ESV." title="Visit www.esv.org to learn about the ESV Bible" width="80" height="21" /></a></span>', 'Scripturizer'); ?>
 					</td>
@@ -315,18 +326,18 @@ that whoever believes in him should not perish but have eternal life. (ESV)">Joh
            			<?php _e('Advanced Options', 'Scripturizer'); ?>
            		</th>
            		<td>
-           	<p>
-            <?php _e('For more information about these options visit the "Plan Text Output" section of the <a href="http://www.esvapi.org/api#plain-text-output">ESV Bible Web Service API documentation</a>.', 'Scripturizer'); ?>
-            </p>
                 <?php
-                    if (get_option('scripturizer_esv_query_options') == ''){
-                        $LO_esv_form_qo = 'include-passage-references=false&include-verse-numbers=false&include-short-copyright=true&output-format=plain-text&include-passage-horizontal-lines=false&include-heading-horizontal-lines=false&line-length=60&include-headings=false&include-subheadings=false&include-footnotes=false';
+                    if (!get_option('scripturizer_esv_query_options')) {  //shouldn't be needed now with new install script
+                        $LO_esv_form_qo = array(
+                        	"output-format=plain-text", "include-passage-references=false", "include-first-verse-numbers=false", "include-verse-numbers=false", "include-footnotes=false", "include-short-copyright=true", "include-passage-horizontal-lines=false", "include-heading-horizontal-lines=false", "include-headings=false&include-subheadings=false", 
+                        	"include-selahs=false", 
+                        	"line-length=0");
                 } else {
-                    $esvOptions = implode('&',get_option('scripturizer_esv_query_options'));
-                    $LO_esv_form_qo = get_option('scripturizer_esv_query_options');
+						 $LO_esv_form_qo = get_option('scripturizer_esv_query_options');
+                   $esvOptions = implode('&',$LO_esv_form_qo);
                 } ?>
-					 <input name="scripturizer_esv_query_options[0]" type="hidden" id="scripturizer_esv_query_options[0]" value="output-format=plain-text" />
-                <p>  
+            <input name="scripturizer_esv_query_options[0]" type="hidden" id="scripturizer_esv_query_options[0]" value="output-format=plain-text" />
+            
 			<label><input name="scripturizer_esv_query_options[1]" type="radio" id="scripturizer_esv_query_options[1]" value="include-passage-references=true" <?php checked('include-passage-references=true', $LO_esv_form_qo[1]); ?> />Yes</label>
 			<label><input name="scripturizer_esv_query_options[1]" type="radio" id="scripturizer_esv_query_options[1]" value="include-passage-references=false" <?php checked('include-passage-references=false', $LO_esv_form_qo[1]); ?> />No</label> 
 			<strong>Include Passage Reference</strong>
@@ -346,8 +357,8 @@ that whoever believes in him should not perish but have eternal life. (ESV)">Joh
 			<strong>Include Footnotes</strong>
 			<br />
 			
- 			<label><input name="scripturizer_esv_query_options[5]" type="radio" id="scripturizer_esv_query_options[5]" value="include-short-copyright=true" <?php checked('include-short-copyright=true', $LO_esv_form_qo[5]); ?> />Short</label>
  			<label><input name="scripturizer_esv_query_options[5]" type="radio" id="scripturizer_esv_query_options[5]" value="include-copyright=true" <?php checked('include-copyright=true', $LO_esv_form_qo[5]); ?> />Long</label>
+			<label><input name="scripturizer_esv_query_options[5]" type="radio" id="scripturizer_esv_query_options[5]" value="include-short-copyright=true" <?php checked('include-short-copyright=true', $LO_esv_form_qo[5]); ?> />Short</label>
  			<strong>Include Copyright</strong>
  			<br/>
  			
@@ -367,7 +378,9 @@ that whoever believes in him should not perish but have eternal life. (ESV)">Joh
  			<strong>Include Selahs</strong> common in Psalms
  			
  			<input name="scripturizer_esv_query_options[10]" type="hidden" id="scripturizer_esv_query_options[10]" value="line-length=0" />
-				</p>
+			    <p>
+            <?php _e('For more information about these options visit the "Plan Text Output" section of the <a href="http://www.esvapi.org/api#plain-text-output">ESV Bible Web Service API documentation</a>.', 'Scripturizer'); ?>
+            </p>
 			</td>
 			</tr>
 			</tbody>
@@ -375,9 +388,9 @@ that whoever believes in him should not perish but have eternal life. (ESV)">Joh
 
 
     <p class="submit">
-    <input type="submit" name="info_update" value="<?php _e('Update Options', 'Scripturizer') ?>" />
+    <input type="submit" name="info_update" value="<?php _e('Update Options »', 'Scripturizer') ?>" />
     <input type="submit" name="uninstall" value="<?php _e('Reset/Uninstall Scripturizer', 'Scripturizer') ?>" />
-    <a href="http://scripturizer.wordpress.com/usage"><?php _e('Help', 'Scripturizer'); ?></a>
+    <a style="color:#333;" href="http://scripturizer.wordpress.com/usage"><?php _e('Help', 'Scripturizer'); ?></a>
     </p>
     </form>
 
@@ -388,10 +401,11 @@ that whoever believes in him should not perish but have eternal life. (ESV)">Joh
 # END ADMIN CONSOLE #####
 
 function scripturize($text = '',$bible = NULL) {
-
+	
 	if (!isset($bible)) {
 		$bible = get_option('scripturizer_default_translation');
 	}
+	
     // skip everything within a hyperlink, a <pre> block, a <code> block, or a tag
     // we skip inside tags because something like <img src="nicodemus.jpg" alt="John 3:16"> should not be messed with
 	$anchor_regex = '<a\s+href.*?<\/a>';
@@ -467,7 +481,7 @@ global $scripturizer_translations;
 
 
 	// note that this will be executed as PHP code after substitution thanks to the /e at the end!
-    $passage_regex = '/(?:('.$volume_regex.')\s)?('.$book_regex.')\s+('.$verse_regex.')(?:\s?[,-]?\s?((?:'.$translation_regex.')|\s?\((?:'.$translation_regex.')\)))?/e';
+    $passage_regex = '/(?:('.$volume_regex.')\s)?('.$book_regex.')(?:&nbsp;?|\s+)('.$verse_regex.')(?:\s?[,-]?\s?((?:'.$translation_regex.')|\s?\((?:'.$translation_regex.')\)))?/e';
 
     $replacement_regex = "scripturizeLinkReference('\\0','\\1','\\2','\\3','\\4','$bible')";
 
@@ -482,17 +496,21 @@ function buildNewWindowLink($link, $volume, $book, $verse) {
     return $new_window_link;
 }
 
-function buildBiblerefTitle($translation, $volume, $book, $verse){
+function buildBiblerefTitle($translation, $volume, $book, $verse, $user_translation){
 	$book = str_replace('.','',$book);
-	if (get_option('scripturizer_xml_tooltip')) { // Insert ToolTip and include ESV verse text
+	if (get_option('scripturizer_xml_tooltip') && !is_feed()  && $user_translation == '') { // Insert ToolTip and include ESV verse text
 		 $output= getEsvText($volume, $book, $verse);
     } else {
 		$output = $translation .' ' .$volume.$book. ' ' .$verse;
 	}
+	$needHeaders = '1';
+	
 	return $output;
 }
 
-function scripturizeLinkReference($reference='',$volume='',$book='',$verse='',$translation='',$user_translation='') {
+function scripturizeLinkReference($reference='',$volume='',$book='',$verse='',$user_translation='',$translation='') {
+
+echo "trans:".$translation." user_translation:".$user_translation;
 global $scripturizer_translations;
     if ($volume) {
        $volume = str_replace('III','3',$volume);
@@ -518,7 +536,7 @@ global $scripturizer_translations;
    } else {
        $translation = trim($translation,' ()'); // strip out any parentheses that might have made it this far
    }
-
+	
    // if necessary, just choose part of the verse reference to pass to the web interfaces
    // they wouldn't know what to do with John 5:1-2, 5, 10-13 so I just give them John 5:1-2
    // this doesn't work quite right with something like 1:5,6 - it gets chopped to 1:5 instead of converted to 1:5-6
@@ -531,109 +549,97 @@ global $scripturizer_translations;
 	}
 
    switch ($translation) {
-        case 'ESV':
+	case 'ESV':
         // note: the ESV could actually support a mouseover reference
         // we could pull it directly from their site and include it in the $title text
         // http://www.esvapi.org/api for more info
-             $link = 'http://www.gnpcb.org/esv/search/?go=Go&amp;q=';
-             $title = buildBiblerefTitle($translation, $volume, $book, $verse); // title attribute now follows the bibleref semantic standards
+             $url = 'http://www.gnpcb.org/esv/search/?go=Go&amp;q=';
 
-                // If the user selects the "Open link in new window" option,
-                // then build the link here.
-            	if (get_option('scripturizer_link_window') == '1') {
-                    $scripturizer_new_window_link = buildNewWindowLink($link, $volume, $book, $verse);
-            	}
-            	if (get_option('scripturizer_link_window')=='2') {
-					$link = sprintf('<a href="%s%s" title="%s" class="bibleref" target="_new">%s</a>',$link,htmlentities(urlencode(trim("$volume $book $verse"))),$title,trim($reference));
-            	} else {
-					 $link = sprintf('<a href="%s%s" title="%s" class="bibleref">%s</a>',$link,htmlentities(urlencode(trim("$volume $book $verse"))),$title,trim($reference));
-				}
-             break;
-        case 'NET':
-		// example URL http://www.bible.org/netbible2/index.php?book=gen&chapter=1&verse=1&submit=Lookup+Verse
-             $link = 'http://www.bible.org/netbible2/index.php';
-             $title = buildBiblerefTitle($translation, $volume, $book, $verse); // title attribute now follows the bibleref semantic standards
+              $url = sprintf('%s%s',$url,htmlentities(urlencode(trim("$volume $book $verse"))));
+      
+	break;
+	
+	case 'NET':
+	// example URL http://www.bible.org/netbible2/index.php?book=gen&chapter=1&verse=1&submit=Lookup+Verse
+             $url = 'http://www.bible.org/netbible2/index.php';
              $chapter = trim(strtok($verse,':'));
              $verses = trim(strtok('-,'));
              $book = scripturizeNETBook($volume.' '.$book);
-            if (get_option('scripturizer_link_window') == '1') {
-				  $scripturizer_new_window_link = buildNewWindowLink($link, $volume, $book, $verse);
-			}
-			if (get_option('scripturizer_link_window')=='2') {
-				 $link = sprintf('<a href="%s?book=%s&amp;chapter=%s&amp;verse=%s&amp;submit=Lookup+Verse" title="%s" class=" bibleref" target="_new">%s</a>',$link,htmlentities(urlencode($book)),$chapter,$verses,$title,trim($reference));
-
-			} else {
-				 $link = sprintf('<a href="%s?book=%s&amp;chapter=%s&amp;verse=%s&amp;submit=Lookup+Verse" title="%s" class=" bibleref">%s</a>',$link,htmlentities(urlencode($book)),$chapter,$verses,$title,trim($reference));
-            }
-             break;
+            $url = sprintf('%s?book=%s&amp;chapter=%s&amp;verse=%s&amp;submit=Lookup+Verse',$url,htmlentities(urlencode($book)),$chapter,$verses);
+    break;
+    
 	case 'NRSV':
 	// example URL http://bible.oremus.org/?passage=John+1%3A1&vnum=yes&version=nrsv
 	// there is a new interface being developed at http://bible.oremus.org/bible.cgi
-             $link = 'http://bible.oremus.org/';
-             $title = buildBiblerefTitle($translation, $volume, $book, $verse); // title attribute now follows the bibleref semantic standards
-			 $options ='&amp;vnum=yes&amp;version=nrsv';
-			if (get_option('scripturizer_link_window') == '1') {
-				  $scripturizer_new_window_link = buildNewWindowLink($link, $volume, $book, $verse);
-			}
-			if (get_option('scripturizer_link_window')=='2') {
-				$link = sprintf('<a href="%s?passage=%s%s" title="%s" target="_new" class="bibleref">%s</a>',$link,htmlentities(urlencode(trim("$volume $book $verse"))),$options,$title,trim($reference));
-			} else {
-				 $link = sprintf('<a href="%s?passage=%s%s" title="%s" class="bibleref">%s</a>',$link,htmlentities(urlencode(trim("$volume $book $verse"))),$options,$title,trim($reference));
-            }
-             break;
+            $url = 'http://bible.oremus.org/';
+			$options ='&amp;vnum=yes&amp;version=nrsv';
+			$url = sprintf('%s?passage=%s%s',$url,htmlentities(urlencode(trim("$volume $book $verse"))),$options);
+    break;
+    
 	case 'LXX':
 	// example URL http://www.zhubert.com/bible?book=Matthew&chapter=2&verse=3
 	// there's also an XML interface to this content - could do a trick like I propose with the ESV
-             $link = 'http://www.zhubert.com/bible';
-             $title = buildBiblerefTitle($translation, $volume, $book, $verse); // title attribute now follows the bibleref semantic standards
+             $url = 'http://www.zhubert.com/bible';
 			$chapter=zhubertize_chapter($verse);
 			$verse=zhubertize_verse($verse);
 			$book=zhubertize_book($volume.' '.$book);
-             $link = sprintf('<a href="%s?book=%s&amp;chapter=%d&amp;verse=%d" title="%s" class="bibleref">%s</a>',$link,htmlentities(urlencode(trim($book))),$chapter,$verse,$title,trim($reference));
-             break;
-        default:
-		// Bible Gateway has a ton of translations, so just make it the default instead of checking for each one
-		// $translation_regex takes care of ensuring that only valid translations make it this far, anyway
-		// api at http://biblegateway.com/usage/linking/
+             $url = sprintf('%s?book=%s&amp;chapter=%d&amp;verse=%d',$url,htmlentities(urlencode(trim($book))),$chapter,$verse);
+    break;
+	
+	default:
+	// Bible Gateway has a ton of translations, so just make it the default instead of checking for each one
+	// $translation_regex takes care of ensuring that only valid translations make it this far, anyway
+	// api at http://biblegateway.com/usage/linking/
 
-		// Due to recent API updates, I added the following code to convert tranlation names (i.e. NIV) to
-		// the corresponding IDs per http://www.biblegateway.com/usage/linking/versionslist.php (LO; 3/10/07)
+	// Due to recent API updates, I added the following code to convert tranlation names (i.e. NIV) to
+	// the corresponding IDs per http://www.biblegateway.com/usage/linking/versionslist.php (LO; 3/10/07)
 
-		foreach ($scripturizer_translations as $t => $v) { //Get the translation ID from the global array
-		   	if ($v['abbrv'] === $translation)  {
-		   		$translation_id = $v['gateway_id'];
-			}
+	foreach ($scripturizer_translations as $t => $v) { //Get the translation ID from the global array
+		if ($v['abbrv'] === $translation)  {
+			$translation_id = $v['gateway_id'];
 		}
+	}
 
-        $link = "http://biblegateway.com/bible?version=$translation_id&amp;passage=";
-	    $title = buildBiblerefTitle($translation, $volume, $book, $verse); // title attribute now follows the bibleref semantic standards
-            // If the user selects the "Open link in new window" option,
-            // then build the link here.
-        if (get_option('scripturizer_link_window')=='1') {
-                $scripturizer_new_window_link = buildNewWindowLink($link, $volume, $book, $verse);
-        	} 
-        if (get_option('scripturizer_link_window')=='2') {
-			$link = sprintf('<a href="%s%s" class="bibleref" title="%s" target="_new">%s</a>',$link,htmlentities(urlencode(trim("$volume $book $verse"))),$title,trim($reference)); 
-        } else {
-			$link = sprintf('<a href="%s%s" class="bibleref" title="%s">%s</a>',$link,htmlentities(urlencode(trim("$volume $book $verse"))),$title,trim($reference));
-			}
-        
-    	break;
+	$url = "http://biblegateway.com/bible?version=$translation_id&amp;passage=";
+	$url = sprintf('%s%s',$url,htmlentities(urlencode(trim("$volume $book $verse")))); 
+
+	break;
     }
 
+	$title = buildBiblerefTitle($translation, $volume, $book, $verse, $user_translation); // title attribute now follows the bibleref semantic standards
+	if (get_option('scripturizer_xml_tooltip') && !is_feed()  && $user_translation == '') { // Insert ToolTip and include ESV verse text
+		$class = 'bibleref scripturizer_tooltip';
+	} else {
+		$class = 'bibleref';
+	}
+
+	// If the user selects the "Open link in new window" option,
+	if (get_option('scripturizer_link_window')=='1') {
+			$scripturizer_new_window_link = buildNewWindowLink($link, $volume, $book, $verse);
+		} 
+	if (get_option('scripturizer_link_window')=='2') {
+		$target = ' target="_new"';
+	} else {
+		$target = '';
+	}
+	
+	// Have all the options, time to build the link
+	$link = '<a href="'.$url.'" class="'.$class.'" title="'.$title.'"'.$target.'>'.trim($reference).'</a>';
+		
+		
 	if (get_option('scripturizer_libronix')) {
 		$link.=$libronix;
 	}
 	# Insert Show/Hide link and include ESV verse text
-	if (get_option('scripturizer_xml_show_hide')) {
+	if (get_option('scripturizer_xml_show_hide') && !is_feed() && $user_translation == '') {
 	
 		$esvResponse = getEsvText($volume, $book, $verse);
 
 	    // Build the show/hide link
-		$esvSpanId = 'scripturizer' .mt_rand(); //prefix the rand number with "id" to pass XHTML validation
-		$output_dynamic = " <a href=\"javascript://\" onclick=\"showhide('"
-        . $esvSpanId
-        . "');\"><small>[show/hide]</small></a><span id=\"" . $esvSpanId . "\" class=\"scripturizer_showhide\">"
+	    $randId = mt_rand(); //prefix the rand number with "id" to pass XHTML validation
+		$output_dynamic = " <a href=\"javascript://\" id=\"showhide".$randId."\" onclick=\"showhide('"
+        . $randId
+        . "');\"><small>[show]</small></a><span id=\"scripturizer" . $randId . "\" class=\"scripturizer_showhide\">"
         . $esvResponse
         . "<br />"
         . "<a href=\"http://www.esv.org/\"><img src=\"http://www.esv.org/assets/buttons/small.7.png\" alt=\"This text is from the ESV Bible. Visit www.esv.org to learn about the ESV.\" title=\"Visit www.esv.org to learn about the ESV Bible\" width=\"80\" height=\"21\" /></a>"
@@ -973,16 +979,18 @@ if (! function_exists('esvShowHideHeader')) {
 
         $content = "
             <script language=\"javascript\" type=\"text/javascript\">
-            <!-- I modified this script: http://lists.evolt.org/archive/Week-of-Mon-20020624/116151.html to get the following
+
             var state = 'none';
 
             function showhide(layer_ref) {
 
             if (state == 'block') {
             state = 'none';
+            document.getElementById(\"showhide\"+layer_ref).innerHTML = \"<small>[show]</small>\";
             }
             else {
             state = 'block';
+            document.getElementById(\"showhide\"+layer_ref).innerHTML = \"<small>[hide]</small>\";
             }
             if (document.all) { //IS IE 4 or 5 (or 6 beta)
             eval( \"document.all.\" + layer_ref + \".style.display = state\");
@@ -991,8 +999,9 @@ if (! function_exists('esvShowHideHeader')) {
             document.layers[layer_ref].display = state;
             }
             if (document.getElementById && !document.all) {
-            maxwell_smart = document.getElementById(layer_ref);
+            maxwell_smart = document.getElementById(\"scripturizer\"+layer_ref);
             maxwell_smart.style.display = state;
+
             }
             }
             //-->
@@ -1011,7 +1020,7 @@ if (! function_exists('esvToolTipHeader')) {
             <script type=\"text/javascript\" src=\"".get_settings('siteurl') ."/wp-content/plugins/the-holy-scripturizer/tooltip-v0.2.js\"></script>
             <script type=\"text/javascript\">
 			Event.observe(window,\"load\",function() {
-				   $$(\".bibleref\").findAll(function(node){
+				   $$(\".scripturizer_tooltip\").findAll(function(node){
 					 return node.getAttribute('title');
 				   }).each(function(node){
 					 new Tooltip(node,node.title);
