@@ -38,6 +38,7 @@ Scripturizer uses PHP-based filtering to automatically convert Bible references 
 * Streamlined Code & Small File Size
 * Redesigned Admin Panel to match WordPress 2.5
 * CSS Code moved to an external file
+* Added support for periods and endashes in the reference (ex. John 3.16&ndash;17)
 
 == Installation ==
 

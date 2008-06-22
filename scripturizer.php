@@ -468,7 +468,7 @@ global $scripturizer_translations;
 
     $book_regex='(?:'.$book_regex.')|(?:'.$abbrev_regex.')\.?';
 
-    $verse_regex="\d{1,3}(?::\d{1,3})?(?:\s?(?:[-&,]\s?\d+))*";
+    $verse_regex="\d{1,3}(?:[:.]\d{1,3})?(?:\s?(?:\s?(?:&amp;|&ndash;|[-&,])?\s?\d+))*";
 
 	// non Bible Gateway translations are all together at the end to make it easier to maintain the list
 	$translation_abbrv = array(); //Container array for abbreviations string
@@ -534,11 +534,10 @@ global $scripturizer_translations;
 //       $translation = trim($translation,' ()'); // strip out any parentheses that might have made it this far
 //   }
 	
-   // if necessary, just choose part of the verse reference to pass to the web interfaces
-   // they wouldn't know what to do with John 5:1-2, 5, 10-13 so I just give them John 5:1-2
-   // this doesn't work quite right with something like 1:5,6 - it gets chopped to 1:5 instead of converted to 1:5-6
+   // BibleGateway doesn't like ampersands, but knows what to do with commas
    if ($verse) {
-       $verse = strtok($verse,',& ');
+       $verse = str_replace('&amp;',',',$verse);
+       $verse = str_replace('&ndash;','-',$verse);
    }
 
 	if (get_option('scripturizer_libronix')) {
