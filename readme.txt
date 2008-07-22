@@ -29,6 +29,10 @@ Scripturizer uses PHP-based filtering to automatically convert Bible references 
 * Support for [Libronix](http://www.libronix.com/ "Libronix is a digital library software system from Logos Software") links.
 * [Bibleref](http://semanticbible.com/bibleref/bibleref-overview.html "Bibleref, semantic standards for Bible verse markup") standards compliant.
 
+= New in Version 1.8.2 =
+
+* Removed an unnecessary function to reduce file size
+
 = New in Version 1.8.1 =
 
 * Fixed bug where open in new window via icon feature would return 404 errors
