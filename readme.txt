@@ -11,7 +11,7 @@ Automatically link your Bible references to Bible sites. Works with almost every
 == Description ==
 
 Automaticallly hyperlink Bible references. No special tags or extra coding are needed. Simply type a Bible reference, like John 3:16, and it is converted automatically to [John 3:16](http://www.gnpcb.org/esv/search/?q=john+3.16 "Read John 3:16").
-svn
+
 Scripturizer uses PHP-based filtering to automatically convert Bible references in your posts, pages, and comments into hyperlinks which point to major online Bible websites, such as the [Bible Gateway](http://www.biblegateway.com/ "The Bible Gateway"), [NET Bible](http://www.bible.org/ "The NET Bible"), the [ESV Bible](http://www.gnpcb.org/esv/ "The ESV Bible"), and others.
 
 = Features: =
