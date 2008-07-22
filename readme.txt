@@ -4,7 +4,7 @@ Donate link: http://lo.notsorry.net
 Tags: Bible, Scripture, Christian, post, comments, formatting, ajax
 Requires at least: 2.1
 Tested up to: 2.6
-Stable tag: 1.8.1
+Stable tag: 1.8.2
 
 Automatically link your Bible references to Bible sites. Works with almost every major Bible version in many languages. Easy setup; customizable.
 
