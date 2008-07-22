@@ -488,8 +488,9 @@ global $scripturizer_translations;
     return $text;
 }
 
-function buildNewWindowLink($link, $volume, $book, $verse) {
-    $new_window_link = sprintf('<a href="%s%s" class="scripturizer_newwindow" title="Open this passage in a new browser window" target="_new"><img src="' .get_settings('siteurl') .'/wp-content/plugins/the-holy-scripturizer/new-window.gif" alt="Open Link in New Window" /></a>',$link,htmlentities(urlencode(trim("$volume $book $verse"))));
+function buildNewWindowLink($url) {
+    $new_window_link = '<a href="'.$url.'" class="scripturizer_newwindow" title="Open this passage in a new browser window" target="_new"><img src="' .get_settings('siteurl') .'/wp-content/plugins/the-holy-scripturizer/new-window.gif" alt="Open Link in New Window" /></a>';
+    /*$new_window_link = sprintf('<a href="%s%s" class="scripturizer_newwindow" title="Open this passage in a new browser window" target="_new"><img src="' .get_settings('siteurl') .'/wp-content/plugins/the-holy-scripturizer/new-window.gif" alt="Open Link in New Window" /></a>',$link,htmlentities(urlencode(trim("$volume $book $verse"))));*/
 
     return $new_window_link;
 }
@@ -608,7 +609,7 @@ global $scripturizer_translations;
 
 	// If the user selects the "Open link in new window" option,
 	if (get_option('scripturizer_link_window')=='1') {
-			$scripturizer_new_window_link = buildNewWindowLink($link, $volume, $book, $verse);
+			$scripturizer_new_window_link = buildNewWindowLink($url);
 		} 
 	if (get_option('scripturizer_link_window')=='2') {
 		$target = ' target="_new"';

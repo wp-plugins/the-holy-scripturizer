@@ -35,7 +35,7 @@ Scripturizer uses PHP-based filtering to automatically convert Bible references 
 * ESV Show/Hide links can now be used even in the default translation links to another translation
 * Show/Hide links changed from [+/-] to [show]
 * Easier installation
-* Streamlined Code & Small File Size
+* Streamlined code & smaller file size
 * Redesigned Admin Panel to match WordPress 2.5
 * CSS Code moved to an external file
 * Added support for periods and endashes in the reference (ex. John 3.16&ndash;17)
