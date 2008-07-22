@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: The Holy Scripturizer
-Version: 1.8
+Version: 1.8.1
 Plugin URI: http://scripturizer.wordpress.com
 Description: Automatically converts Bible references into hyperlinks pointed to major online Bible sites.
 Author: Dean Peters, ported by Glen Davis, updated by Laurence O'Donnell (v1.5-1.7) & Peter V Cook (v1.8)
