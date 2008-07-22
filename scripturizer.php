@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: The Holy Scripturizer
-Version: 1.8
+Version: 1.8.2
 Plugin URI: http://scripturizer.wordpress.com
 Description: Automatically converts Bible references into hyperlinks pointed to major online Bible sites.
 Author: Dean Peters, ported by Glen Davis, updated by Laurence O'Donnell (v1.5-1.7) & Peter V Cook (v1.8)
@@ -488,13 +488,6 @@ global $scripturizer_translations;
     return $text;
 }
 
-function buildNewWindowLink($url) {
-    $new_window_link = '<a href="'.$url.'" class="scripturizer_newwindow" title="Open this passage in a new browser window" target="_new"><img src="' .get_settings('siteurl') .'/wp-content/plugins/the-holy-scripturizer/new-window.gif" alt="Open Link in New Window" /></a>';
-    /*$new_window_link = sprintf('<a href="%s%s" class="scripturizer_newwindow" title="Open this passage in a new browser window" target="_new"><img src="' .get_settings('siteurl') .'/wp-content/plugins/the-holy-scripturizer/new-window.gif" alt="Open Link in New Window" /></a>',$link,htmlentities(urlencode(trim("$volume $book $verse"))));*/
-
-    return $new_window_link;
-}
-
 function buildBiblerefTitle($translation, $volume, $book, $verse, $user_translation){
 	$book = str_replace('.','',$book);
 	if (get_option('scripturizer_xml_tooltip') && !is_feed()  && ($user_translation == '' || $user_translation == 'ESV')) { // Insert ToolTip and include ESV verse text
@@ -609,7 +602,7 @@ global $scripturizer_translations;
 
 	// If the user selects the "Open link in new window" option,
 	if (get_option('scripturizer_link_window')=='1') {
-			$scripturizer_new_window_link = buildNewWindowLink($url);
+			$scripturizer_new_window_link = '<a href="'.$url.'" class="scripturizer_newwindow" title="Open this passage in a new browser window" target="_new"><img src="' .get_settings('siteurl') .'/wp-content/plugins/the-holy-scripturizer/new-window.gif" alt="Open Link in New Window" /></a>';
 		} 
 	if (get_option('scripturizer_link_window')=='2') {
 		$target = ' target="_new"';
