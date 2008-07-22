@@ -3,8 +3,8 @@ Contributors: laurence0, petervcook
 Donate link: http://lo.notsorry.net
 Tags: Bible, Scripture, Christian, post, comments, formatting, ajax
 Requires at least: 2.1
-Tested up to: 2.5.1
-Stable tag: 1.8
+Tested up to: 2.6
+Stable tag: 1.8.1
 
 Automatically link your Bible references to Bible sites. Works with almost every major Bible version in many languages. Easy setup; customizable.
 
@@ -28,6 +28,10 @@ Scripturizer uses PHP-based filtering to automatically convert Bible references 
 * Dozens of versions supported in many languages. To use a specific translation, simple post-fix the abbreviation for that translation to the reference, like this: Genesis 1:1 ESV; Genesis 1:1 NIV; etc. (See the usage instructions page for more detailed instructions.)
 * Support for [Libronix](http://www.libronix.com/ "Libronix is a digital library software system from Logos Software") links.
 * [Bibleref](http://semanticbible.com/bibleref/bibleref-overview.html "Bibleref, semantic standards for Bible verse markup") standards compliant.
+
+= New in Version 1.8.1 =
+
+* Fixed bug where open in new window via icon feature would return 404 errors
 
 = New in Version 1.8 =
 
