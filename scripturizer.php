@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: The Holy Scripturizer
-Version: 1.8.2
+Version: 1.8.3
 Plugin URI: http://scripturizer.wordpress.com
 Description: Automatically converts Bible references into hyperlinks pointed to major online Bible sites.
 Author: Dean Peters, ported by Glen Davis, updated by Laurence O'Donnell (v1.5-1.7) & Peter V Cook (v1.8)
@@ -253,6 +253,7 @@ global $scripturizer_translations;
 						}
 						?>
 						</select>
+						<br /><?php _e('Scripturizer supports any version from the <a href="http://www.biblegateway.com" title="Go to Bible Gateway">Bible Gateway</a> plus ESV, NET, NRSV, and LXX.', 'Scripturizer'); ?>
 				  </td>
 				</tr>
 				<tr valign="top">
@@ -315,7 +316,7 @@ global $scripturizer_translations;
            		</th>
           		<td>
           			<input name="scripturizer_xml_tooltip" type="checkbox" id="scripturizer_xml_tooltip" value="1" <?php checked('1', get_option('scripturizer_xml_tooltip')); ?> />
-			<?php _e('Use rollover tool tip. Example: <a href="http://biblegateway.com/bible?version=31&amp;passage=John+3%3A16" class="bibleref" title="&quot;For God so loved the world, that he gave his only Son, 
+			<?php _e('Use rollover tool tip. Example: <a href="http://biblegateway.com/bible?version=31&amp;passage=John+3%3A16" class="bibleref scripturizer_tooltip" title="&quot;For God so loved the world, that he gave his only Son, 
 that whoever believes in him should not perish but have eternal life. (ESV)">John 3:16</a>', 'Scripturizer'); ?>
 					</td>
 				</tr>
@@ -468,8 +469,9 @@ global $scripturizer_translations;
 
     $book_regex='(?:'.$book_regex.')|(?:'.$abbrev_regex.')\.?';
 
-    $verse_regex="\d{1,3}(?:[:.]\d{1,3})?(?:\s?(?:\s?(?:&amp;|&ndash;|[-&,])?\s?\d+))*";
-
+    // fix thanks to jon47
+    $verse_regex="\d{1,3}(?:[:.]\d{1,3})?(?:\s?(?:\s?(?:&amp;|&ndash;|[-&,])+\s?\d+))*\b";
+    
 	// non Bible Gateway translations are all together at the end to make it easier to maintain the list
 	$translation_abbrv = array(); //Container array for abbreviations string
 	foreach ($scripturizer_translations as $t => $v) { //Fill up the container
@@ -956,7 +958,7 @@ function scripturizeComment($comment_ID) {
 if (! function_exists('scripturizerHeader')) {
 
     function scripturizerHeader() {
-    	echo '<link rel="stylesheet" type="text/css" media="screen" href="'.get_settings('siteurl') .'/wp-content/plugins/the-holy-scripturizer/scripturizer.css"/></style>';
+    	echo '<link rel="stylesheet" type="text/css" media="screen" href="'.get_settings('siteurl') .'/wp-content/plugins/the-holy-scripturizer/scripturizer.css"/>';
     }
 }
 
