@@ -97,13 +97,13 @@ $scripturizer_translations[20]['abbrv'] = 'NIRV';
 $scripturizer_translations[20]['name'] = 'New International Reader\'s Version';
 $scripturizer_translations[20]['gateway_id'] = '76';
 
-$scripturizer_translations[21]['abbrv'] = 'NIV';
-$scripturizer_translations[21]['name'] = 'New International Version';
-$scripturizer_translations[21]['gateway_id'] = '31';
+$scripturizer_translations[21]['abbrv'] = 'NIVUK';
+$scripturizer_translations[21]['name'] = 'New International Version - UK';
+$scripturizer_translations[21]['gateway_id'] = '64';
 
-$scripturizer_translations[22]['abbrv'] = 'NIVUK';
-$scripturizer_translations[22]['name'] = 'New International Version - UK';
-$scripturizer_translations[22]['gateway_id'] = '64';
+$scripturizer_translations[22]['abbrv'] = 'NIV';
+$scripturizer_translations[22]['name'] = 'New International Version';
+$scripturizer_translations[22]['gateway_id'] = '31';
 
 $scripturizer_translations[23]['abbrv'] = 'NKJV';
 $scripturizer_translations[23]['name'] = 'New King James Version';
@@ -144,6 +144,10 @@ $scripturizer_translations[31]['gateway_id'] = '';
 $scripturizer_translations[32]['abbrv'] = 'NRSV';
 $scripturizer_translations[32]['name'] = 'New Revised Standard Version';
 $scripturizer_translations[32]['gateway_id'] = '';
+
+$scripturizer_translations[33]['abbrv'] = 'NRSVUK';
+$scripturizer_translations[33]['name'] = 'New Revised Standard Version - Angicised edition';
+$scripturizer_translations[33]['gateway_id'] = '';
 
 // Sort the array alphabetically by translation name
 foreach ($scripturizer_translations as $key => $row) {
@@ -253,7 +257,7 @@ global $scripturizer_translations;
 						}
 						?>
 						</select>
-						<br /><?php _e('Scripturizer supports any version from the <a href="http://www.biblegateway.com" title="Go to Bible Gateway">Bible Gateway</a> plus ESV, NET, NRSV, and LXX.', 'Scripturizer'); ?>
+						<br /><?php _e('Scripturizer supports any version from the <a href="http://www.biblegateway.com" title="Go to Bible Gateway">Bible Gateway</a> plus ESV, NET, NRSV, LXX and NRSVUK.', 'Scripturizer'); ?>
 				  </td>
 				</tr>
 				<tr valign="top">
@@ -553,12 +557,9 @@ global $scripturizer_translations;
 	
 	case 'NET':
 	// example URL http://www.bible.org/netbible2/index.php?book=gen&chapter=1&verse=1&submit=Lookup+Verse
-             $url = 'http://www.bible.org/netbible2/index.php';
-             $chapter = trim(strtok($verse,':'));
-             $verses = trim(strtok('-,'));
-             $book = scripturizeNETBook($volume.' '.$book);
-            $url = sprintf('%s?book=%s&amp;chapter=%s&amp;verse=%s&amp;submit=Lookup+Verse',$url,htmlentities(urlencode($book)),$chapter,$verses);
-    break;
+		$url = 'http://net.bible.org/passage.php';
+		$url = sprintf('%s?passage=%s',$url,htmlentities(urlencode(trim("$volume $book $verse"))));
+	break;
     
 	case 'NRSV':
 	// example URL http://bible.oremus.org/?passage=John+1%3A1&vnum=yes&version=nrsv
@@ -576,6 +577,13 @@ global $scripturizer_translations;
 			//$verse=zhubertize_verse($verse);
 			$book=zhubertize_book($volume.' '.$book);
              $url = sprintf('%s?source=greek&verseref=%s',$url,htmlentities(urlencode(trim("$volume $book $verse"))));
+    break;
+    
+    case 'NRSVUK':
+	// example URL http://bible.oremus.org/?passage=John+1%3A1&vnum=yes&version=nrsvae
+		$url = 'http://bible.oremus.org/';
+		$options ='&amp;vnum=yes&amp;version=nrsvae';
+		$url = sprintf('%s?passage=%s%s',$url,htmlentities(urlencode(trim("$volume $book $verse"))),$options);
     break;
 	
 	default:
